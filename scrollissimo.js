@@ -40,8 +40,6 @@ function Scrollissimo(callback){
         windowHeight = Number(window.innerHeight) || window.innerHeight, //window height
         smoothQueues = [], //all animations with smooth effect
         queues = [], //all other animations queues
-        documentElement = document.documentElement,
-        documentBody = document.body,
         getScrollTop,
         setCSSProperty;
 
@@ -50,6 +48,8 @@ function Scrollissimo(callback){
      * @returns {Number} Height of document
      */
     function getDocumentHeight(){
+        var documentElement = document.documentElement,
+            documentBody = document.body;
         return Math.max(
             documentBody.scrollHeight, documentElement.scrollHeight,
             documentBody.offsetHeight, documentElement.offsetHeight,
@@ -61,17 +61,14 @@ function Scrollissimo(callback){
      * Calculate current scrolling value for a bottom edge of window
      * @returns {Number} Length of scrolled area in pixels
      */
-    function getScrollTop(){
-        if('pageYOffset' in window){
-            getScrollTop = function(){
-                return (window.pageYOffset || 0) - (document.clientTop || 0);
-            };
-        }else{
-            getScrollTop = function(){
-                return (document.scrollTop || 0) - (document.clientTop || 0);
-            };
-        }
-        return getScrollTop();
+    if('pageYOffset' in window){
+        getScrollTop = function(){
+            return (window.pageYOffset || 0) - (document.clientTop || 0);
+        };
+    }else{
+        getScrollTop = function(){
+            return (document.scrollTop || 0) - (document.clientTop || 0);
+        };
     }
 
     if(window.jQuery){
