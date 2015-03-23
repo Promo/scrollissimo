@@ -1,17 +1,17 @@
 /* requestAnimationFrame polyfill */
-(function(){
+(function(global){
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x){
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-        || window[vendors[x]+'CancelRequestAnimationFrame'];
+    for(var x = 0; x < vendors.length && !global.requestAnimationFrame; ++x){
+        global.requestAnimationFrame = global[vendors[x]+'RequestAnimationFrame'];
+        global.cancelAnimationFrame = global[vendors[x]+'CancelAnimationFrame']
+        || global[vendors[x]+'CancelRequestAnimationFrame'];
     }
-    if(!window.requestAnimationFrame){
-        window.requestAnimationFrame = function(callback, element){
+    if(!global.requestAnimationFrame){
+        global.requestAnimationFrame = function(callback, element){
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function(){
+            var id = global.setTimeout(function(){
                     callback(currTime + timeToCall);
                 },
                 timeToCall);
@@ -19,12 +19,12 @@
             return id;
         };
     }
-    if (!window.cancelAnimationFrame){
-        window.cancelAnimationFrame = function(id){
+    if (!global.cancelAnimationFrame){
+        global.cancelAnimationFrame = function(id){
             clearTimeout(id);
         };
     }
-}());
+}(this));
 
 
 /**
@@ -40,6 +40,8 @@ function Scrollissimo(callback){
         windowHeight = Number(window.innerHeight) || window.innerHeight, //window height
         smoothQueues = [], //all animations with smooth effect
         queues = [], //all other animations queues
+        documentElement = document.documentElement,
+        documentBody = document.body,
         getScrollTop,
         setCSSProperty;
 
@@ -49,9 +51,9 @@ function Scrollissimo(callback){
      */
     function getDocumentHeight(){
         return Math.max(
-            document.body.scrollHeight, document.documentElement.scrollHeight,
-            document.body.offsetHeight, document.documentElement.offsetHeight,
-            document.body.clientHeight, document.documentElement.clientHeight
+            documentBody.scrollHeight, documentElement.scrollHeight,
+            documentBody.offsetHeight, documentElement.offsetHeight,
+            documentBody.clientHeight, documentElement.clientHeight
         );
     }
 
@@ -142,26 +144,28 @@ function Scrollissimo(callback){
 
                     //if animation is playing
                     if (tweenProgress > 0 && tweenProgress < 1){
-                        target.style[this.params.property] = this.params.prefix + (this.params.from + (this.params.to - this.params.from) * (tweenProgress)) + this.params.suffix;
+                        setCSSProperty(target, this.params.property, this.params.prefix + (this.params.from + (this.params.to - this.params.from) * (tweenProgress)) + this.params.suffix);
 
                         //if animation is already finished
                     }else if (tweenProgress >= 1){
-                        target.style[this.params.property] = this.params.prefix + this.params.to + this.params.suffix;
+                        setCSSProperty(target, this.params.property, this.params.prefix + this.params.to + this.params.suffix);
 
                         //if animation is not started yet
                     }else if (tweenProgress <= 0){
-                        target.style[this.params.property] = this.params.prefix + this.params.from + this.params.suffix;
+                        setCSSProperty(target, this.params.property, this.params.prefix + this.params.from + this.params.suffix);
                     }
                 },
-                recalc: function(){
+                recalc: function(docHeight){
                     var p = {};
+
+                    docHeight = docHeight || getDocumentHeight();
 
                     p.from = this.sourceParams.from || 0;
                     p.to = this.sourceParams.to || 0;
                     p.prefix = this.sourceParams.prefix || '';
                     p.suffix = this.sourceParams.suffix || '';
-                    p.duration = toPercents(this.sourceParams.duration || '');
-                    if(typeof (p.start = toPercents(this.sourceParams.start)) === 'undefined'){
+                    p.duration = toPercents(this.sourceParams.duration || '', docHeight);
+                    if(typeof (p.start = toPercents(this.sourceParams.start, docHeight)) === 'undefined'){
                         p.start = queue.endTime;
                         queue.endTime += p.duration;
                     }
