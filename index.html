@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <title>Scrollissimo</title>
+    <link href="styles.css" rel="stylesheet">
+    <script src="//yastatic.net/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body class="b-page">
+    <div class="promo-page">
+        <h1 id="header" class="header">Scrollissimo</h1>
+        <div class="turn" id="turn"></div>
+    </div>
+    <div class="indicator" id="indicator"></div>
+<script src="//github.yandex-team.ru/frux/scrollissimo/raw/master/scrollissimo.min.js"></script>
+<script>
+    window.onload = function(){
+        //initialize Scrollissimo
+        Scrollissimo(function(){
+
+            //create new queue with animation of scroll indicator
+            this.add(document.getElementById('indicator'), {
+                property: 'width', //animate width
+                prefix: '',
+                from: 0, //from 0...
+                to: 100, //...to 100...
+                suffix: '%', //...percents
+                start: '0%', //start at the beginning of page
+                duration: '100%', //finish after 884 pixels
+                maxSpeed: 0.008
+            });
+
+            //create new queue with animation of header's background
+            this.add(document.getElementById('header'), {
+                property: 'background-position', //animate background's position
+                prefix: 'right -', //X value is constant and always equal 'right' and minus for Y value
+                from: 0, //from 0...
+                to: 200, //...to 400..
+                suffix: 'px', //..pixels
+                start: '0%', //start at the beginning of page
+                duration: '884px' //finish after 884 pixels
+            });
+
+            //create new queue with animation of header's background
+            this.add(document.getElementById('turn'), {
+                property: 'transform', //animate background's position
+                prefix: 'rotate(', //X value is constant and always equal 'right' and minus for Y value
+                from: 0, //from 0...
+                to: 360, //...to 400..
+                suffix: 'deg)', //..pixels
+                start: '0', //start at the beginning of page
+                duration: '100%', //finish after 884 pixels
+                maxSpeed: 0.008
+            });
+
+            //create new queue with animation of header's background
+            this.add(document.getElementById('turn'), {
+                property: 'top', //animate background's position
+                prefix: '', //X value is constant and always equal 'right' and minus for Y value
+                from: 0, //from 0...
+                to: 100, //...to 400..
+                suffix: '%', //..pixels
+                start: '0', //start at the beginning of page
+                duration: '100%', //finish after 884 pixels
+                maxSpeed: 0.008
+            });
+        });
+    };
+</script>
+</body>
+</html>
