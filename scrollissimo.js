@@ -43,6 +43,14 @@ function Scrollissimo(callback){
         getScrollTop,
         setCSSProperty;
 
+    function addEvent(obj, type, fn){
+        if(obj.addEventListener){
+            obj.addEventListener(type, fn, false);
+        }else{
+            obj.attachEvent("on" + type, obj[type + fn]);
+        }
+    }
+
     /**
      * Calculate document's height
      * @returns {Number} Height of document
@@ -153,21 +161,12 @@ function Scrollissimo(callback){
                     }
                 },
                 recalc: function(docHeight){
-                    var p = {};
-
                     docHeight = docHeight || getDocumentHeight();
 
-                    p.from = this.sourceParams.from || 0;
-                    p.to = this.sourceParams.to || 0;
-                    p.prefix = this.sourceParams.prefix || '';
-                    p.suffix = this.sourceParams.suffix || '';
-                    p.duration = toPercents(this.sourceParams.duration || '', docHeight);
-                    if(typeof (p.start = toPercents(this.sourceParams.start, docHeight)) === 'undefined'){
-                        p.start = queue.endTime;
-                        queue.endTime += p.duration;
+                    this.params.duration = toPercents(this.sourceParams.duration || '', docHeight);
+                    if(typeof (this.sourceParams.start) === 'undefined'){
+                        this.params.start = toPercents(this.sourceParams.start, docHeight)
                     }
-
-                    this.params = p;
                 },
                 /**
                  * Get intersection of custom numbers range and animation duration range
@@ -353,9 +352,22 @@ function Scrollissimo(callback){
         });
     }).bind(S);
 
-    window.addEventListener('scroll', (function(){
-        //TODO: remove this shit
-    }).bind(S));
+    addEvent(window, 'resize', function(event){
+        windowHeight = Number(window.innerHeight) || window.innerHeight;
+        docHeight = getDocumentHeight();
+        queues.forEach(function(queue){
+            queue.forEach(function(tween){
+                tween.recalc(docHeight);
+                console.log(tween);
+            });
+        });
+        smoothQueues.forEach(function(queue){
+            queue.forEach(function(tween){
+                tween.recalc(docHeight);
+                console.log(tween);
+            });
+        });
+    });
 
 
     function scrollCatcher(){
