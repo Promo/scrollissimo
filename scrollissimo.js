@@ -369,6 +369,9 @@ function Scrollissimo(callback){
         });
     });
 
+    addEvent(window, 'scroll', function(event){
+        scrollCatcher.call(S);
+    });
 
     function scrollCatcher(){
         var scrollTop = getScrollTop(), //calculate current scroll
@@ -382,7 +385,7 @@ function Scrollissimo(callback){
             this.render(progress);
         }
         lastScroll = scrollTop;
-        requestAnimationFrame(scrollCatcher.bind(this));
+        //requestAnimationFrame(scrollCatcher.bind(this));
     }
 
     requestAnimationFrame(scrollCatcher.bind(S));
