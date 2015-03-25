@@ -15,53 +15,85 @@
 <script src="scrollissimo/scrollissimo.min.js"></script>
 <script>
     window.onload = function(){
+        var smallYellowRectangle = document.getElementById('turn'),
+            indicator = document.getElementById('indicator'),
+            header = document.getElementById('header');
         //initialize Scrollissimo
         Scrollissimo(function(){
 
             //create new queue with animation of scroll indicator
-            this.add(document.getElementById('indicator'), {
+            this.add(indicator, {
                 property: 'width', //animate width
                 prefix: '',
                 from: 0, //from 0...
                 to: 100, //...to 100...
                 suffix: '%', //...percents
-                start: '0%', //start at the beginning of page
-                duration: '100%', //finish after 884 pixels
+                start: '0', //start at the beginning of page
+                duration: '100%', //finish at the end of page
                 maxSpeed: 0.008
             });
 
             //create new queue with animation of header's background
-            this.add(document.getElementById('header'), {
+            this.add(header, {
                 property: 'background-position', //animate background's position
                 prefix: 'right -', //X value is constant and always equal 'right' and minus for Y value
                 from: 0, //from 0...
                 to: 200, //...to 400..
                 suffix: 'px', //..pixels
-                start: '0%', //start at the beginning of page
+                start: '0', //start at the beginning of page
                 duration: '884px' //finish after 884 pixels
             });
 
             //create new queue with animation of header's background
-            this.add(document.getElementById('turn'), {
+            this.add(smallYellowRectangle, {
                 property: 'transform', //animate background's position
                 prefix: 'rotate(', //X value is constant and always equal 'right' and minus for Y value
                 from: 0, //from 0...
                 to: 360, //...to 400..
                 suffix: 'deg)', //..pixels
                 start: '0', //start at the beginning of page
-                duration: '100%', //finish after 884 pixels
+                duration: '100%', //finish at the end of page
                 maxSpeed: 0.008
             });
 
             //create new queue with animation of header's background
-            this.add(document.getElementById('turn'), {
+            this.add(smallYellowRectangle, {
                 property: 'top', //animate background's position
                 prefix: '', //X value is constant and always equal 'right' and minus for Y value
                 from: 0, //from 0...
-                to: 100, //...to 400..
+                to: 50, //...to 400..
                 suffix: '%', //..pixels
                 start: '0', //start at the beginning of page
-                duration: '100%', //finish after 884 pixels
+                duration: '25%', //finish after 884 pixels
+                maxSpeed: 0.008
+            }).then(smallYellowRectangle, {
+                property: 'top', //animate background's position
+                prefix: '', //X value is constant and always equal 'right' and minus for Y value
+                from: 50, //from 0...
+                to: 100, //...to 400..
+                suffix: '%', //..pixels
+                start: '25%', //start at the beginning of page
+                duration: '50%', //finish after 884 pixels
+                maxSpeed: 0.008
+            });
+
+            this.add(smallYellowRectangle, {
+                property: 'left', //animate background's position
+                prefix: '', //X value is constant and always equal 'right' and minus for Y value
+                from: 50, //from 0...
+                to: 0, //...to 400..
+                suffix: '%', //..pixels
+                start: '0', //start at the beginning of page
+                duration: '25%', //finish after 884 pixels
+                maxSpeed: 0.008
+            }).then(smallYellowRectangle, {
+                property: 'left', //animate background's position
+                prefix: '', //X value is constant and always equal 'right' and minus for Y value
+                from: 0, //from 0...
+                to: 50, //...to 400..
+                suffix: '%', //..pixels
+                start: '25%', //start at the beginning of page
+                duration: '50%', //finish after 884 pixels
                 maxSpeed: 0.008
             });
         });
