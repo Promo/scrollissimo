@@ -12,7 +12,7 @@
         <div class="turn" id="turn"></div>
     </div>
     <div class="indicator" id="indicator"></div>
-<script src="scrollissimo/scrollissimo.min.js"></script>
+<script src="scrollissimo/scrollissimo.js"></script>
 <script>
     window.onload = function(){
         var smallYellowRectangle = document.getElementById('turn'),
@@ -61,19 +61,19 @@
                 property: 'top', //animate background's position
                 prefix: '', //X value is constant and always equal 'right' and minus for Y value
                 from: 0, //from 0...
-                to: 50, //...to 400..
+                to: 100, //...to 400..
                 suffix: '%', //..pixels
                 start: '0', //start at the beginning of page
-                duration: '25%', //finish after 884 pixels
+                duration: '50%',
                 maxSpeed: 0.008
             }).then(smallYellowRectangle, {
                 property: 'top', //animate background's position
                 prefix: '', //X value is constant and always equal 'right' and minus for Y value
-                from: 50, //from 0...
-                to: 100, //...to 400..
+                from: 100, //from 0...
+                to: 0, //...to 400..
                 suffix: '%', //..pixels
-                start: '25%', //start at the beginning of page
-                duration: '50%', //finish after 884 pixels
+                start: '50%', //start at the beginning of page
+                duration: '50%',
                 maxSpeed: 0.008
             });
 
@@ -83,8 +83,7 @@
                 from: 50, //from 0...
                 to: 0, //...to 400..
                 suffix: '%', //..pixels
-                start: '0', //start at the beginning of page
-                duration: '25%', //finish after 884 pixels
+                duration: '25%',
                 maxSpeed: 0.008
             }).then(smallYellowRectangle, {
                 property: 'left', //animate background's position
@@ -92,8 +91,23 @@
                 from: 0, //from 0...
                 to: 50, //...to 400..
                 suffix: '%', //..pixels
-                start: '25%', //start at the beginning of page
-                duration: '50%', //finish after 884 pixels
+                duration: '25%',
+                maxSpeed: 0.008
+            }).then(smallYellowRectangle, {
+                property: 'left', //animate background's position
+                prefix: '', //X value is constant and always equal 'right' and minus for Y value
+                from: 50, //from 0...
+                to: 100, //...to 400..
+                suffix: '%', //..pixels
+                duration: '25%',
+                maxSpeed: 0.008
+            }).then(smallYellowRectangle, {
+                property: 'left', //animate background's position
+                prefix: '', //X value is constant and always equal 'right' and minus for Y value
+                from: 100, //from 0...
+                to: 50, //...to 400..
+                suffix: '%', //..pixels
+                duration: '25%',
                 maxSpeed: 0.008
             });
         });
