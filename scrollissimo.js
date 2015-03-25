@@ -232,99 +232,62 @@ function Scrollissimo(callback){
     };
 
     /**
-     * Smooth effect for Scrollissimo
-     * @namespace Scrollissimo
+     * Smoother
      */
     (function(S){
         var lastProgress = 0;
 
-        /**
-         * Render smooth scroll animation
-         * @param progress {Number} Current progress
-         * @param scrollTop {Number} scrollTop value
-         */
-        S.Smoother = function(progress){
-            S.Smoother.smooth(progress);
-        };
+        S.Smoother = {
+            smoothFrom: 0,
+            smoothTo: 0,
+            maxSpeed: 0.005,
+            status: 'idle',
+            makeSmoothy: function(progress){
+                if(this.status === 'idle'){
+                    this.run(progress);
+                }else{
+                    this.smoothTo = progress;
+                }
+            },
 
-        /**
-         * Animation controlling class
-         * @param tween {Object} Tween object
-         * @constructor
-         */
-        S.Smoother.Animator = function(tween){
-            this.status = 'stopped';
-            this.animateFrom = 0;
-            this.animateTo = 0;
-            this.tween = tween;
-        };
-
-        /**
-         * Smoothing step function
-         */
-        S.Smoother.Animator.prototype.step = function(){
-            var delta = this.animateTo - this.animateFrom,
-                absDelta = Math.abs(delta),
-                maxSpeed = this.tween.params.maxSpeed;
-
-            if(absDelta > maxSpeed){
-                delta = (delta > 0 ? maxSpeed : -maxSpeed);
-                absDelta = Math.abs(delta);
-            }
-
-            this.animateFrom += delta;
-
-            this.tween.render.call(this.tween, this.animateFrom);
-
-            if(absDelta > 0){
+            run: function(progress){
+                this.status = 'playing';
+                this.smoothTo = progress;
                 requestAnimationFrame(this.step.bind(this));
-            }else{
-                this.status = 'stopped';
-            }
-        };
+            },
 
-        /**
-         * Run smoothing
-         * @returns {S.Smoother.Animator}
-         */
-        S.Smoother.Animator.prototype.run = function(){
-            this.status = 'playing';
-            if(this.id){
-                cancelAnimationFrame(this.id);
-            }
-            this.id = requestAnimationFrame(this.step.bind(this));
-            return this;
-        };
-
-        /**
-         * Smoothly run each tween
-         */
-        S.Smoother.smooth = (function(progress){
-            var self = this;
-            smoothQueues.forEach(function(queue){
-                var playing = false,
-                    max = queue.length, i,
-                    tween,
-                    intersection;
-
-                for(i = 0; i < max; i++){
-                    tween = queue[i];
-                    intersection = tween.getIntersection.call(tween, lastProgress, progress);
-
-                    if(intersection && (intersection.from !== intersection.to)){
-                        if((!tween.animator && (tween.animator = new self.Animator(tween))) || tween.animator.status !== 'playing'){
-                            tween.animator.animateTo = intersection.to;
-                            tween.animator.run();
-                        }else{
-                            tween.animator.animateTo = intersection.to;
+            render: function(progress){
+                smoothQueues.forEach(function(queue){
+                    var max = queue.length, i,
+                        tween,
+                        intersection;
+                    for(i = 0; i < max; i++){
+                        tween = queue[i];
+                        intersection = tween.getIntersection(lastProgress, progress);
+                        if(intersection){
+                            tween.render(progress);
+                            break;
                         }
                     }
-                    if(tween.animator.status === 'playing') break;
-                }
-            });
+                });
 
-            lastProgress = progress;
-        }).bind(S.Smoother);
+                lastProgress = progress;
+            },
+
+            step: function(){
+                var delta = this.smoothTo - this.smoothFrom,
+                    absDelta = Math.abs(delta);
+                if(absDelta > this.maxSpeed){
+                    this.smoothFrom += this.maxSpeed * (delta < 0 ? -1 : 1);
+                    this.render(this.smoothFrom);
+                    requestAnimationFrame(this.step.bind(this));
+                }else{
+                    this.render(this.smoothTo);
+                    this.smoothFrom = this.smoothTo;
+                    this.status = 'idle';
+                }
+            }
+        };
     })(S);
 
     /**
@@ -376,6 +339,7 @@ function Scrollissimo(callback){
 
     addEvent(window, 'scroll', function(event){
         scrollCatcher.call(S);
+        setTimeout(scrollCatcher.bind(S), 100);
     });
 
     function scrollCatcher(){
@@ -384,7 +348,7 @@ function Scrollissimo(callback){
 
         if(scrollTop !== lastScroll){
             //render animations with smooth effect
-            this.Smoother(progress);
+            this.Smoother.makeSmoothy(progress);
 
             //render all other animations
             this.render(progress);
@@ -393,7 +357,7 @@ function Scrollissimo(callback){
         //requestAnimationFrame(scrollCatcher.bind(this));
     }
 
-    requestAnimationFrame(scrollCatcher.bind(S));
+    //requestAnimationFrame(scrollCatcher.bind(S));
 
     (callback || function(){}).call(S);
     return S;
