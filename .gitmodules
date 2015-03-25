@@ -1,0 +1,3 @@
+[submodule "scrollissimo"]
+	path = scrollissimo
+	url = https://github.yandex-team.ru/frux/scrollissimo.git
