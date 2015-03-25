@@ -302,7 +302,8 @@ function Scrollissimo(callback){
         S.Smoother.smooth = (function(progress){
             var self = this;
             smoothQueues.forEach(function(queue){
-                var max = queue.length, i,
+                var playing = false,
+                    max = queue.length, i,
                     tween,
                     intersection;
 
@@ -317,8 +318,8 @@ function Scrollissimo(callback){
                         }else{
                             tween.animator.animateTo = intersection.to;
                         }
-                        break;
                     }
+                    if(tween.animator.status === 'playing') break;
                 }
             });
 
