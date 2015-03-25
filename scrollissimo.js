@@ -302,8 +302,13 @@ function Scrollissimo(callback){
         S.Smoother.smooth = (function(progress){
             var self = this;
             smoothQueues.forEach(function(queue){
-                queue.forEach(function(tween){
-                    var intersection = tween.getIntersection.call(tween, lastProgress, progress);
+                var max = queue.length, i,
+                    tween,
+                    intersection;
+
+                for(i = 0; i < max; i++){
+                    tween = queue[i];
+                    intersection = tween.getIntersection.call(tween, lastProgress, progress);
 
                     if(intersection && (intersection.from !== intersection.to)){
                         if((!tween.animator && (tween.animator = new self.Animator(tween))) || tween.animator.status !== 'playing'){
@@ -312,8 +317,9 @@ function Scrollissimo(callback){
                         }else{
                             tween.animator.animateTo = intersection.to;
                         }
+                        break;
                     }
-                });
+                }
             });
 
             lastProgress = progress;
@@ -358,13 +364,11 @@ function Scrollissimo(callback){
         queues.forEach(function(queue){
             queue.forEach(function(tween){
                 tween.recalc(docHeight);
-                console.log(tween);
             });
         });
         smoothQueues.forEach(function(queue){
             queue.forEach(function(tween){
                 tween.recalc(docHeight);
-                console.log(tween);
             });
         });
     });
