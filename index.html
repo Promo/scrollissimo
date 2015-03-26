@@ -20,62 +20,87 @@
             header = document.getElementById('header');
         //initialize Scrollissimo
         Scrollissimo(function(){
-
-            this.add(header, {
-                property: 'font-size',
-                from: 0,
-                to: 150,
-                suffix: 'px',
-                start: '0',
-                duration: '5%',
-                maxSpeed: 0.008
-            }).then(header, {
-                property: 'font-size',
-                from: 150,
-                to: 50,
-                suffix: 'px',
-                start: '5%',
-                duration: '10%',
-                maxSpeed: 0.008
-            }).then(header, {
-                property: 'top',
-                from: 50,
-                to: 10,
-                suffix: '%',
-                start: '0%',
-                duration: '10%',
-                maxSpeed: 0.008
-            }).then(header, {
-                property: 'text-shadow',
-                from: 0,
-                to: 18,
-                prefix: '0 0 ',
-                suffix: 'px rgba(0,0,0,.35)',
-                start: '0',
-                duration: '5%',
-                maxSpeed: 0.008
-            }).then(header, {
-                property: 'text-shadow',
-                from: 18,
-                to: 0,
-                prefix: '0 0 ',
-                suffix: 'px rgba(0,0,0,.25)',
-                start: '5%',
-                duration: '10%',
-                maxSpeed: 0.008
-            });
+            this.add([
+                {
+                    target: header,
+                    property: 'font-size',
+                    from: 0,
+                    to: 150,
+                    suffix: 'px',
+                    start: '0',
+                    duration: '5%'
+                },
+                {
+                    target: header,
+                    property: 'text-shadow',
+                    from: 0,
+                    to: 18,
+                    prefix: '0 0 ',
+                    suffix: 'px rgba(0,0,0,.35)',
+                    start: '0',
+                    duration: '5%'
+                },
+                {
+                    target: header,
+                    property: 'text-shadow',
+                    from: 0,
+                    to: 18,
+                    prefix: '0 0 ',
+                    suffix: 'px rgba(0,0,0,.35)',
+                    start: '0',
+                    duration: '5%'
+                },
+                {
+                    target: header,
+                    property: 'transform',
+                    prefix: 'rotate(',
+                    from: 0,
+                    to: 360,
+                    suffix: 'deg)',
+                    start: '0',
+                    duration: '5%'
+                },
+                {
+                    target: header,
+                    property: 'top',
+                    from: 50,
+                    to: 20,
+                    suffix: '%',
+                    start: '0',
+                    duration: '10%'
+                },
+                {
+                    target: header,
+                    property: 'font-size',
+                    from: 150,
+                    to: 50,
+                    suffix: 'px',
+                    start: '5%',
+                    duration: '10%'
+                },
+                {
+                    target: header,
+                    property: 'text-shadow',
+                    from: 18,
+                    to: 0,
+                    prefix: '0 0 ',
+                    suffix: 'px rgba(0,0,0,.25)',
+                    start: '5%',
+                    duration: '10%'
+                }
+            ], 0.002);
 
             //create new queue with animation of scroll indicator
-            this.add(indicator, {
+            this.add({
+                target: indicator,
                 property: 'width', //animate width
                 prefix: '',
                 from: 0, //from 0...
                 to: 100, //...to 100...
                 suffix: '%', //...percents
                 start: '0', //start at the beginning of page
-                duration: '100%', //finish at the end of page
-                maxSpeed: 0.008
-            });
+                duration: '100%' //finish at the end of page
+            }, 0.002);
         });
     };
 </script>
