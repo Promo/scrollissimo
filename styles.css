@@ -1,37 +1,8 @@
-html,
-body
-{
-    height: 100%;
-    min-height: 100%;
-}
 .b-page
 {
+    height: 1000vh;
     margin: 0;
     padding: 0;
-}
-.promo-page
-{
-    height: 400vh;
-
-    background: #fff;
-}
-.header
-{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 84px;
-    line-height: 884px;
-
-    display: block;
-
-    height: 884px;
-    margin: 0;
-    padding: 0;
-
-    text-align: center;
-
-    color: #fff;
-    background: url(header.jpg) no-repeat right top;
-    text-shadow: 0 0 25px rgba(0,0,0,.45);
 }
 .indicator
 {
@@ -45,14 +16,29 @@ body
     opacity: .25;
     background: #000;
 }
-.turn
+.screen
 {
     position: fixed;
     top: 0;
-    left: 50%;
+    left: 0;
 
-    width: 84px;
-    height: 94px;
+    width: 100vw;
+    height: 100vh;
+}
+.screen_num_1
+{
+    background: #ccc;
+}
+.screen_num_1 .header
+{
+    font: 0px/1 Arial, Helvetica, sans-serif;
 
-    background: url(sonic_roll.png) no-repeat left top;
+    position: absolute;
+    top: 50%;
+
+    width: 100%;
+
+    text-align: center;
+
+    color: #fff;
 }

@@ -7,19 +7,63 @@
     <script src="//yastatic.net/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body class="b-page">
-    <div class="promo-page">
+    <section id="screen1" class="screen screen_num_1">
         <h1 id="header" class="header">Scrollissimo</h1>
         <div class="turn" id="turn"></div>
-    </div>
+    </section>
     <div class="indicator" id="indicator"></div>
 <script src="scrollissimo/scrollissimo.js"></script>
 <script>
     window.onload = function(){
-        var smallYellowRectangle = document.getElementById('turn'),
+        var screen1 = document.getElementById('screen1'),
             indicator = document.getElementById('indicator'),
             header = document.getElementById('header');
         //initialize Scrollissimo
         Scrollissimo(function(){
+
+            this.add(header, {
+                property: 'font-size',
+                from: 0,
+                to: 150,
+                suffix: 'px',
+                start: '0',
+                duration: '5%',
+                maxSpeed: 0.008
+            }).then(header, {
+                property: 'font-size',
+                from: 150,
+                to: 50,
+                suffix: 'px',
+                start: '5%',
+                duration: '10%',
+                maxSpeed: 0.008
+            }).then(header, {
+                property: 'top',
+                from: 50,
+                to: 10,
+                suffix: '%',
+                start: '0%',
+                duration: '10%',
+                maxSpeed: 0.008
+            }).then(header, {
+                property: 'text-shadow',
+                from: 0,
+                to: 18,
+                prefix: '0 0 ',
+                suffix: 'px rgba(0,0,0,.35)',
+                start: '0',
+                duration: '5%',
+                maxSpeed: 0.008
+            }).then(header, {
+                property: 'text-shadow',
+                from: 18,
+                to: 0,
+                prefix: '0 0 ',
+                suffix: 'px rgba(0,0,0,.25)',
+                start: '5%',
+                duration: '10%',
+                maxSpeed: 0.008
+            });
 
             //create new queue with animation of scroll indicator
             this.add(indicator, {
@@ -30,84 +74,6 @@
                 suffix: '%', //...percents
                 start: '0', //start at the beginning of page
                 duration: '100%', //finish at the end of page
-                maxSpeed: 0.008
-            });
-
-            //create new queue with animation of header's background
-            this.add(header, {
-                property: 'background-position', //animate background's position
-                prefix: 'right -', //X value is constant and always equal 'right' and minus for Y value
-                from: 0, //from 0...
-                to: 200, //...to 400..
-                suffix: 'px', //..pixels
-                start: '0', //start at the beginning of page
-                duration: '884px' //finish after 884 pixels
-            });
-
-            //create new queue with animation of header's background
-            this.add(smallYellowRectangle, {
-                property: 'transform', //animate background's position
-                prefix: 'rotate(', //X value is constant and always equal 'right' and minus for Y value
-                from: 0, //from 0...
-                to: 360, //...to 400..
-                suffix: 'deg)', //..pixels
-                start: '0', //start at the beginning of page
-                duration: '100%', //finish at the end of page
-                maxSpeed: 0.008
-            });
-
-            //create new queue with animation of header's background
-            this.add(smallYellowRectangle, {
-                property: 'top', //animate background's position
-                prefix: '', //X value is constant and always equal 'right' and minus for Y value
-                from: 0, //from 0...
-                to: 100, //...to 400..
-                suffix: '%', //..pixels
-                start: '0', //start at the beginning of page
-                duration: '50%',
-                maxSpeed: 0.008
-            }).then(smallYellowRectangle, {
-                property: 'top', //animate background's position
-                prefix: '', //X value is constant and always equal 'right' and minus for Y value
-                from: 100, //from 0...
-                to: 0, //...to 400..
-                suffix: '%', //..pixels
-                start: '50%', //start at the beginning of page
-                duration: '50%',
-                maxSpeed: 0.008
-            });
-
-            this.add(smallYellowRectangle, {
-                property: 'left', //animate background's position
-                prefix: '', //X value is constant and always equal 'right' and minus for Y value
-                from: 50, //from 0...
-                to: 0, //...to 400..
-                suffix: '%', //..pixels
-                duration: '25%',
-                maxSpeed: 0.008
-            }).then(smallYellowRectangle, {
-                property: 'left', //animate background's position
-                prefix: '', //X value is constant and always equal 'right' and minus for Y value
-                from: 0, //from 0...
-                to: 50, //...to 400..
-                suffix: '%', //..pixels
-                duration: '25%',
-                maxSpeed: 0.008
-            }).then(smallYellowRectangle, {
-                property: 'left', //animate background's position
-                prefix: '', //X value is constant and always equal 'right' and minus for Y value
-                from: 50, //from 0...
-                to: 100, //...to 400..
-                suffix: '%', //..pixels
-                duration: '25%',
-                maxSpeed: 0.008
-            }).then(smallYellowRectangle, {
-                property: 'left', //animate background's position
-                prefix: '', //X value is constant and always equal 'right' and minus for Y value
-                from: 100, //from 0...
-                to: 50, //...to 400..
-                suffix: '%', //..pixels
-                duration: '25%',
                 maxSpeed: 0.008
             });
         });
