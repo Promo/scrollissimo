@@ -24,10 +24,11 @@
 
     width: 100vw;
     height: 100vh;
+
+    background: #00557a;
 }
 .screen_num_1
 {
-    background: #00557a;
 }
 .screen_num_1 .header
 {
