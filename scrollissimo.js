@@ -8,7 +8,7 @@
         || global[vendors[x]+'CancelRequestAnimationFrame'];
     }
     if(!global.requestAnimationFrame){
-        global.requestAnimationFrame = function(callback, element){
+        global.requestAnimationFrame = function(callback){
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
             var id = global.setTimeout(function(){
@@ -43,11 +43,17 @@ function Scrollissimo(callback){
         getScrollTop,
         setCSSProperty;
 
-    function addEvent(obj, type, fn){
+    /**
+     * addEventListener polyfill
+     * @param obj {Object} Event target
+     * @param eventName {String} Event name
+     * @param fn {Function} Event handler
+     */
+    function addEvent(obj, eventName, fn){
         if(obj.addEventListener){
-            obj.addEventListener(type, fn, false);
+            obj.addEventListener(eventName, fn, false);
         }else{
-            obj.attachEvent("on" + type, obj[type + fn]);
+            obj.attachEvent("on" + eventName, obj[eventName + fn]);
         }
     }
 
@@ -66,6 +72,36 @@ function Scrollissimo(callback){
     }
 
     /**
+     * Get intersection of custom numbers ranges
+     * @param f {Number}
+     * @param t {Number}
+     * @param s {Number}
+     * @param e {Number}
+     * @returns {{from: Number, to: Number}|undefined}
+     */
+    function getIntersection(f, t, s, e){
+        var start = Math.min(s, e),
+            end = Math.max(s, e),
+            from = f,
+            to = t,
+            n1,
+            n2;
+
+        if(start <= from && end >= from){
+            n1 = from;
+            n2 = Math.min(end, to);
+        }else if(end >= to && start <= to){
+            n1 = Math.max(start, from);
+            n2 = Math.min(end, to);
+        }else if(start >= from && end <= to){
+            n1 = start;
+            n2 = start;
+        }else return;
+
+        return (s < e ? {from: n1, to: n2} : {from: n2, to: n1});
+    }
+
+    /**
      * Calculate current scrolling value for a bottom edge of window
      * @returns {Number} Length of scrolled area in pixels
      */
@@ -79,10 +115,13 @@ function Scrollissimo(callback){
         };
     }
 
+    //if jQuery included use $.fn.css to set properties
     if(window.jQuery){
         setCSSProperty = function(target, property, value){
             $(target).css(property, value);
         }
+
+        //else use standard element.style.setProperty
     }else{
         setCSSProperty = function(target, property, value){
             target.style.setProperty(property, value);
@@ -93,20 +132,26 @@ function Scrollissimo(callback){
     /**
      * Converts pixels in percents related to a document's height
      * @param px {Number|String} Value in pixels
+     * * @param documentHeight {Number|undefined} Document's height in pixels
      * @depends getDocumentHeight
      * @returns {Number} Value in percents
      */
     function toPercents(px, documentHeight){
         documentHeight = documentHeight || docHeight;
 
-        //if
+        //if is string
         if(typeof px === 'string'){
+            //if in percents
             if(px.substr(-1, 1) === '%'){
                 return parseInt(px) / 100;
+                //if in pixels
             }else if(px.substr(-2, 2) === 'px'){
                 return (parseInt(px) / documentHeight);
             }
+            //otherwise parse as percents
             return parseInt(px) / getDocumentHeight();
+
+            //else if it isn't even a number
         }else if(!isNaN(px)){
             return (px / documentHeight);
         }
@@ -114,33 +159,31 @@ function Scrollissimo(callback){
 
     /**
      * Configure render function for animating specified property
-     * @param target {HTMLElement} Target of animation
-     * @param params {Object} Object containing animation params
-     * @param queue {Queue} Queue this animation will be added to
+     * @param animation {Object} Animation's params
+     * @param queue {S.Queue} Queue this animation will be added to
      * @returns {Object} Object containing Animation's params and render function
      */
-    function makeTween(target, params, queue){
-        if(typeof params === 'object'){
+    function makeTween(animation, queue){
+        if(typeof animation === 'object'){
             var p = {};
 
             //process animation params
-            p.property = params.property;
-            p.from = params.from || 0;
-            p.to = params.to || 0;
-            p.prefix = params.prefix || '';
-            p.suffix = params.suffix || '';
-            p.duration = toPercents(params.duration) || 0;
-            p.maxSpeed = parseFloat(params.maxSpeed);
+            p.property = animation.property;
+            p.from = animation.from || 0;
+            p.to = animation.to || 0;
+            p.prefix = animation.prefix || '';
+            p.suffix = animation.suffix || '';
+            p.duration = toPercents(animation.duration) || 0;
+
             //if start is not specified set it to the end of queue
-            if(typeof (p.start = toPercents(params.start)) === 'undefined'){
-                p.start = queue.endTime;
-                queue.endTime += p.duration;
+            if(typeof (p.start = toPercents(animation.start)) === 'undefined'){
+                p.start = queue.end;
             }
             p.queue = queue;
 
             return {
                 animator: null,
-                sourceParams: params, //remember source params
+                sourceParams: animation, //remember source params
                 params : p, //processed params
                 render: function(progress){
 
@@ -149,15 +192,15 @@ function Scrollissimo(callback){
 
                     //if animation is playing
                     if (tweenProgress > 0 && tweenProgress < 1){
-                        setCSSProperty(target, this.params.property, this.params.prefix + (this.params.from + (this.params.to - this.params.from) * (tweenProgress)) + this.params.suffix);
+                        setCSSProperty(animation.target, this.params.property, this.params.prefix + (this.params.from + (this.params.to - this.params.from) * (tweenProgress)) + this.params.suffix);
 
                         //if animation is already finished
                     }else if (tweenProgress >= 1){
-                        setCSSProperty(target, this.params.property, this.params.prefix + this.params.to + this.params.suffix);
+                        setCSSProperty(animation.target, this.params.property, this.params.prefix + this.params.to + this.params.suffix);
 
                         //if animation is not started yet
                     }else if (tweenProgress <= 0){
-                        setCSSProperty(target, this.params.property, this.params.prefix + this.params.from + this.params.suffix);
+                        setCSSProperty(animation.target, this.params.property, this.params.prefix + this.params.from + this.params.suffix);
                     }
                 },
                 recalc: function(docHeight){
@@ -172,28 +215,10 @@ function Scrollissimo(callback){
                  * Get intersection of custom numbers range and animation duration range
                  * @param lastProgress {Number}
                  * @param progress {Number}
-                 * @returns {{from: Number, to: Number}}
+                 * @returns {{from: Number, to: Number}|undefined}
                  */
                 getIntersection: function(lastProgress, progress){
-                    var start = Math.min(lastProgress, progress),
-                        end = Math.max(lastProgress, progress),
-                        from = this.params.start,
-                        to = this.params.start + this.params.duration,
-                        n1,
-                        n2;
-
-                    if(start <= from && end >= from){
-                        n1 = from;
-                        n2 = Math.min(end, to);
-                    }else if(end >= to && start <= to){
-                        n1 = Math.max(start, from);
-                        n2 = Math.min(end, to);
-                    }else if(start >= from && end <= to){
-                        n1 = start;
-                        n2 = end;
-                    }else return;
-
-                    return (lastProgress < progress ? {from: n1, to: n2} : {from: n2, to: n1});
+                    return getIntersection(this.params.start, (this.params.start + this.params.duration), lastProgress, progress);
                 }
             }
         }
@@ -202,12 +227,15 @@ function Scrollissimo(callback){
     /**
      * Animation queue class
      * @extends Array
-     * @namespace Scrollissimo
+     * @namespace S
      * @constructor
      */
-    S.Queue = function(){
+    S.Queue = function(maxSpeed){
         //total duration of  this queue's animations
-        this.endTime = 0;
+        this.start = 0;
+        this.end = 0;
+
+        !isNaN(maxSpeed) && (this.smoother = new S.Queue.Smoother(this, maxSpeed));
     };
 
     //queue actually is extended array
@@ -215,96 +243,155 @@ function Scrollissimo(callback){
 
     /**
      * Add animation to the queue
-     * @param target {HTMLElement} Target of animation
-     * @param params {Object} Object containing animation params
-     * @returns {Scrollissimo.Queue|undefined}
+     * @param animations {Object|Array} Animation object or array of animation objects
+     * @returns {S.Queue|undefined}
      */
-    S.Queue.prototype.then = function(target, params){
-        var tween = makeTween(target, params, this);
+    S.Queue.prototype.add = function(animations){
 
-        //if tween made successfully
-        if(typeof tween === 'object'){
-            this.push(tween);
+        if(!(animations instanceof Array)){
+            if(typeof animations === 'object'){
+                animations = [animations];
+            }else return;
         }
+
+        animations.forEach((function(animation){
+            var tween = makeTween(animation, this);
+
+            if(tween){
+                this.push(tween);
+                if(this.end < tween.params.start + tween.params.duration){
+                    this.end = tween.params.start + tween.params.duration;
+                }
+            }
+        }).bind(this));
+
+        this.sort(function(a, b){
+            return a.params.duration - b.params.duration;
+        });
+
+        this.start = (this[0] && this[0].params.start) || 0;
 
         //return for chaining
         return this;
     };
 
     /**
-     * Smoother
+     * Get intersection of custom numbers range and queue duration range
+     * @param lastProgress {Number}
+     * @param progress {Number}
+     * @returns {{from: Number, to: Number}|undefined}
      */
-    (function(S){
-        var lastProgress = 0;
+    S.Queue.prototype.getIntersection = function(lastProgress, progress){
+        return getIntersection(this.start, this.end, lastProgress, progress);
+    };
 
-        S.Smoother = {
-            smoothFrom: 0,
-            smoothTo: 0,
-            maxSpeed: 0.005,
-            status: 'idle',
-            makeSmoothy: function(progress){
-                if(this.status === 'idle'){
-                    this.run(progress);
-                }else{
-                    this.smoothTo = progress;
-                }
-            },
+    /**
+     * Queue smoother class
+     * @param queue {S.Queue} Queue to smooth
+     * @param maxSpeed {Number} Max percents of page's height animation can play on one requestAnimationFrame tick
+     * @constructor
+     */
+    S.Queue.Smoother = function(queue, maxSpeed){
+        this.status = 'idle';
+        this.animateFrom = 0;
+        this.animateTo = 0;
+        this.maxSpeed = +maxSpeed;
+        this.queue = queue;
+    };
 
-            run: function(progress){
-                this.status = 'playing';
-                this.smoothTo = progress;
+    /**
+     * Render specified progress of current queue's animations
+     * @param lastProgress {Number} Last progress value
+     * @param progress {Number} Current progress value
+     */
+    S.Queue.Smoother.prototype.render = function(lastProgress, progress){
+        this.queue.forEach(function(tween){
+            var intersection = tween.getIntersection(lastProgress, progress);
+            if(intersection){
+                tween.render(intersection.to);
+            }
+        });
+    };
+
+    /**
+     * Smoother's tick function
+     */
+    S.Queue.Smoother.prototype.step = function(){
+        var delta = this.animateTo - this.animateFrom;
+
+        if(Math.abs(delta) > this.maxSpeed){
+            this.render(this.animateFrom, this.animateFrom += this.maxSpeed * (delta > 0 ? 1 : -1));
+            requestAnimationFrame(this.step.bind(this));
+        }else{
+            this.render(this.animateFrom, this.animateTo);
+            this.status = 'idle';
+            this.animateFrom = this.animateTo;
+        }
+    };
+
+    /**
+     * Smooth jump from last progress value to current one
+     * @param from {Number} Last progress value
+     * @param to {Number} Current progress value
+     */
+    S.Queue.Smoother.prototype.smooth = function(from, to){
+        var intersection = this.queue.getIntersection(from, to);
+
+        //Check if current scrolling intersects this queue
+        if(intersection){
+            //set finish value
+            this.animateTo = intersection.to;
+            //if Smoother is not ran run it
+            if(this.status === 'idle'){
+                //set playing status
+                this.status = 'busy';
+                //tick
                 requestAnimationFrame(this.step.bind(this));
-            },
+            }
+            this.id = requestAnimationFrame(this.step.bind(this));
+            return this;
+        };
 
-            render: function(progress){
-                smoothQueues.forEach(function(queue){
-                    var max = queue.length, i,
-                        tween,
-                        intersection;
-                    for(i = 0; i < max; i++){
-                        tween = queue[i];
-                        intersection = tween.getIntersection(lastProgress, progress);
-                        if(intersection){
-                            tween.render(progress);
-                            break;
+        /**
+         * Smoothly run each tween
+         */
+        S.Smoother.smooth = (function(progress){
+            var self = this;
+            smoothQueues.forEach(function(queue){
+                queue.forEach(function(tween){
+                    var intersection = tween.getIntersection.call(tween, lastProgress, progress);
+
+                    if(intersection && (intersection.from !== intersection.to)){
+                        if((!tween.animator && (tween.animator = new self.Animator(tween))) || tween.animator.status !== 'playing'){
+                            tween.animator.animateTo = intersection.to;
+                            tween.animator.run();
+                        }else{
+                            tween.animator.animateTo = intersection.to;
                         }
                     }
                 });
+            });
 
-                lastProgress = progress;
-            },
-
-            step: function(){
-                var delta = this.smoothTo - this.smoothFrom,
-                    absDelta = Math.abs(delta);
-                if(absDelta > this.maxSpeed){
-                    this.smoothFrom += this.maxSpeed * (delta < 0 ? -1 : 1);
-                    this.render(this.smoothFrom);
-                    requestAnimationFrame(this.step.bind(this));
-                }else{
-                    this.render(this.smoothTo);
-                    this.smoothFrom = this.smoothTo;
-                    this.status = 'idle';
-                }
-            }
-        };
-    })(S);
+            lastProgress = progress;
+        }).bind(S.Smoother);
+    };
 
     /**
-     * Create new queue and add animation to the beginning
-     * @param target {HTMLElement} Target of animation
-     * @param params {Object} Object containing animation's params
-     * @param smooth {Boolean} Add smooth effect to this queue's animations
-     * return {Scrollissimo.Queue}
+     * Create new queue and add animation(s) to the beginning
+     * @param animations {Object|Array} Target of animation or array of animations
+     * return {S.Queue}
      */
-    S.add = (function(target, params){
+    S.add = (function(animations, maxSpeed){
         var newQueue;
 
+        //if specified one animation instead of array wrp it by array
+        animations = animations || [];
+
         //create new Queue and add animtion to the beginning
-        newQueue = new this.Queue().then(target, params);
+        newQueue = new this.Queue(maxSpeed).add(animations);
 
         //add new queue to all queues
-        (params.maxSpeed ? smoothQueues : queues).push(newQueue);
+        (maxSpeed ? smoothQueues : queues).push(newQueue);
 
         return newQueue;
     }).bind(S);
@@ -320,44 +407,60 @@ function Scrollissimo(callback){
                 tween.render(progress);
             });
         });
+
+        smoothQueues.forEach(function(queue){
+            queue.smoother.smooth(S.lastProgress, progress);
+        });
+
+        S.lastProgress= progress;
     }).bind(S);
 
-    addEvent(window, 'resize', function(event){
+    S.lastProgress = 0;
+
+    //every time window will be resized
+    addEvent(window, 'resize', function(){
+
+        //calculate new window height
         windowHeight = Number(window.innerHeight) || window.innerHeight;
+
+        //calculate new document height
         docHeight = getDocumentHeight();
+
+        //run recalculate method of each tween
         queues.forEach(function(queue){
             queue.forEach(function(tween){
                 tween.recalc(docHeight);
+                console.log(tween);
             });
         });
+        //...for smooth queues too
         smoothQueues.forEach(function(queue){
             queue.forEach(function(tween){
                 tween.recalc(docHeight);
+                console.log(tween);
             });
         });
     });
 
-    addEvent(window, 'scroll', function(event){
+    addEvent(window, 'scroll', function(){
         scrollCatcher.call(S);
-        setTimeout(scrollCatcher.bind(S), 100);
+        setTimeout(function(){ scrollCatcher.call(S) }, 100);
     });
 
     function scrollCatcher(){
+
         var scrollTop = getScrollTop(), //calculate current scroll
             progress = scrollTop / (docHeight - windowHeight); //calculate current scroll progress
 
+        //if it's not a fake calling
         if(scrollTop !== lastScroll){
-            //render animations with smooth effect
-            this.Smoother.makeSmoothy(progress);
-
-            //render all other animations
+            //render animations
             this.render(progress);
         }
-        lastScroll = scrollTop;
-        //requestAnimationFrame(scrollCatcher.bind(this));
-    }
 
-    //requestAnimationFrame(scrollCatcher.bind(S));
+        //remember current progress value
+        lastScroll = scrollTop;
+    }
 
     (callback || function(){}).call(S);
     return S;
