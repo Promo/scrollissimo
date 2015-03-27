@@ -102,7 +102,7 @@ function Scrollissimo(callback){
         if(obj.addEventListener){
             obj.addEventListener(eventName, fn, false);
         }else{
-            obj.attachEvent("on" + eventName, obj[eventName + fn]);
+            obj.attachEvent("on" + eventName, fn);
         }
     }
 
