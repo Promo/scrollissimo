@@ -46,7 +46,7 @@
                     from: 0,
                     to: 18,
                     prefix: '0 0 ',
-                    suffix: 'px rgba(0,0,0,.35)',
+                    suffix: 'px rgba(0,0,0,.5)',
                     start: '0',
                     duration: '5%'
                 },
@@ -87,8 +87,17 @@
                     suffix: 'px rgba(0,0,0,.25)',
                     start: '5%',
                     duration: '10%'
+                },
+                {
+                    target: header,
+                    function: function(progress){
+                        var blur = progress.toFixed(3) * 30;
+                        blurissimo(this.target, blur);
+                    },
+                    start: '0',
+                    duration: '10%'
                 }
-            ], 0.002);
+            ], 0.0003);
 
             //create new queue with animation of scroll indicator
             this.add({
@@ -103,6 +112,22 @@
             });
         });
     };
+
+    (function(w){
+        var ie = (!!document.all);
+        w.blurissimo = function(target, strength){
+            if(typeof target.style.filter !== 'undefined'){
+                target.style.filter = 'blur(' + strength + 'px)';
+
+                if(ie && !window.atob){
+                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
+                }
+            }
+            if(typeof target.style.webikitFilter !== 'undefined'){
+                target.style.webikitFilter = 'blur(' + strength + 'px)';
+            }
+        }
+    })(this);
 </script>
 </body>
 </html>
