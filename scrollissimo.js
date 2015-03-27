@@ -16,7 +16,7 @@
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
             var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-                17);
+                timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
@@ -210,24 +210,13 @@ function Scrollissimo(callback){
                 target: animation.target,
                 sourceParams: animation, //remember source params
                 params : p, //processed params
-                render: animation.function || function(progress){
-
-                    //calculate local progress for current animation
-                    var tweenProgress = (progress - this.params.start) / this.params.duration;
-
-                    //if animation is playing
-                    if (tweenProgress > 0 && tweenProgress < 1){
-                        setCSSProperty(animation.target, this.params.property, this.params.prefix + (this.params.from + (this.params.to - this.params.from) * (tweenProgress)) + this.params.suffix);
-
-                        //if animation is already finished
-                    }else if (tweenProgress >= 1){
-                        setCSSProperty(animation.target, this.params.property, this.params.prefix + this.params.to + this.params.suffix);
-
-                        //if animation is not started yet
-                    }else if (tweenProgress <= 0){
-                        setCSSProperty(animation.target, this.params.property, this.params.prefix + this.params.from + this.params.suffix);
-                    }
-                },
+                render: tweenRender.bind(this,
+                    p.start,
+                    p.duration,
+                    (animation.function || function(progress){
+                        setCSSProperty(animation.target, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
+                    }).bind(animation.target)
+                ),
                 recalc: function(docHeight){
                     docHeight = docHeight || getDocumentHeight();
 
@@ -249,8 +238,16 @@ function Scrollissimo(callback){
         }
     }
 
-    function tweenRender(start, duration, progress, render){
-        var tweenProgress = (progress - start);
+    function tweenRender(start, duration, render, progress){
+        var tweenProgress = (progress - start) / duration;
+        console.log(render);
+        if (tweenProgress > 0 && tweenProgress < 1){
+            render(tweenProgress);
+        }else if (tweenProgress >= 1){
+            render(1);
+        }else if (tweenProgress <= 0){
+            render(0);
+        }
     }
 
     /**
