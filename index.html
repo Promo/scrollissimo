@@ -97,7 +97,7 @@
                     start: '0',
                     duration: '10%'
                 }
-            ], 0.01);
+            ], 0.0003);
 
             //create new queue with animation of scroll indicator
             this.add({
@@ -118,7 +118,7 @@
         w.blurissimo = function(target, strength){
             if(typeof target.style.filter !== 'undefined'){
                 if(ie && !window.atob){
-                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
+                    //target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
                 }else{
                     target.style.filter = 'blur(' + strength + 'px)';
                 }
