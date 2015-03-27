@@ -14,7 +14,7 @@
             var id = global.setTimeout(function(){
                     callback(currTime + timeToCall);
                 },
-                timeToCall);
+                20);
             lastTime = currTime + timeToCall;
             return id;
         };
@@ -223,6 +223,10 @@ function Scrollissimo(callback){
                 }
             }
         }
+    }
+
+    function tweenRender(start, duration, progress, render){
+        var tweenProgress = (progress - start);
     }
 
     /**
