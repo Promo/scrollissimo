@@ -91,7 +91,7 @@
                 {
                     target: header,
                     function: function(progress){
-                        var blur = (progress * 30).toFixed(3);
+                        var blur = (progress * 30).toFixed(2);
                         blurissimo(this.target, blur);
                     },
                     start: '0',
@@ -118,7 +118,7 @@
         w.blurissimo = function(target, strength){
             if(typeof target.style.filter !== 'undefined'){
                 if(ie && !window.atob){
-                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + Math.round(strength.toFixed(2)) + '\')';
+                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
                 }else{
                     target.style.filter = 'blur(' + strength + 'px)';
                 }
