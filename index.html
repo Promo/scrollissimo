@@ -52,16 +52,6 @@
                 },
                 {
                     target: header,
-                    property: 'transform',
-                    prefix: 'rotate(',
-                    from: 0,
-                    to: 360,
-                    suffix: 'deg)',
-                    start: '0',
-                    duration: '5%'
-                },
-                {
-                    target: header,
                     property: 'top',
                     from: 50,
                     to: 20,
@@ -91,13 +81,13 @@
                 {
                     target: header,
                     function: function(progress){
-                        var blur = (progress * 3).toFixed(2);
+                        var blur = ((1-progress) * 3).toFixed(2);
                         blurissimo(this, blur);
                     },
                     start: '0',
                     duration: '10%'
                 }
-            ], 0.0003);
+            ], 0.001);
 
             //create new queue with animation of scroll indicator
             this.add({
@@ -118,7 +108,7 @@
         w.blurissimo = function(target, strength){
             if(typeof target.style.filter !== 'undefined'){
                 if(ie && !window.atob){
-                    //target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
+                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
                 }else{
                     target.style.filter = 'blur(' + strength + 'px)';
                 }
