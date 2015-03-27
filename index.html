@@ -117,10 +117,10 @@
         var ie = (!!document.all);
         w.blurissimo = function(target, strength){
             if(typeof target.style.filter !== 'undefined'){
-                target.style.filter = 'blur(' + strength + 'px)';
-
                 if(ie && !window.atob){
                     target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + Math.round(strength.toFixed(2)) + '\')';
+                }else{
+                    target.style.filter = 'blur(' + strength + 'px)';
                 }
             }
             if(typeof target.style.webikitFilter !== 'undefined'){
