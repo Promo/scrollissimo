@@ -183,9 +183,10 @@ function Scrollissimo(callback){
 
             return {
                 animator: null,
+                target: animation.target,
                 sourceParams: animation, //remember source params
                 params : p, //processed params
-                render: function(progress){
+                render: animation.function || function(progress){
 
                     //calculate local progress for current animation
                     var tweenProgress = (progress - this.params.start) / this.params.duration;
@@ -355,7 +356,7 @@ function Scrollissimo(callback){
         /**
          * Smoothly run each tween
          */
-        S.Smoother.smooth = (function(progress){
+        S.Queue.Smoother.smooth = (function(progress){
             var self = this;
             smoothQueues.forEach(function(queue){
                 queue.forEach(function(tween){
