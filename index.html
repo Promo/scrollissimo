@@ -108,7 +108,7 @@
         w.blurissimo = function(target, strength){
             if(typeof target.style.filter !== 'undefined'){
                 if(ie && !window.atob){
-                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
+                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength * 10 + '\')';
                 }else{
                     target.style.filter = 'blur(' + strength + 'px)';
                 }
