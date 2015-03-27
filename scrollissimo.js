@@ -1,30 +1,54 @@
 /* requestAnimationFrame polyfill */
-(function(global){
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !global.requestAnimationFrame; ++x){
-        global.requestAnimationFrame = global[vendors[x]+'RequestAnimationFrame'];
-        global.cancelAnimationFrame = global[vendors[x]+'CancelAnimationFrame']
-        || global[vendors[x]+'CancelRequestAnimationFrame'];
+(function () {
+    var lastTime = 0,
+        vendors = ['ms', 'moz', 'webkit', 'o'],
+    // Feature check for performance (high-resolution timers)
+        hasPerformance = !!(window.performance && window.performance.now);
+
+    for(var x = 0, max = vendors.length; x < max && !window.requestAnimationFrame; x += 1) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
+        || window[vendors[x]+'CancelRequestAnimationFrame'];
     }
-    if(!global.requestAnimationFrame){
-        global.requestAnimationFrame = function(callback){
+
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = global.setTimeout(function(){
-                    callback(currTime + timeToCall);
-                },
-                20);
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
     }
-    if (!global.cancelAnimationFrame){
-        global.cancelAnimationFrame = function(id){
+
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
     }
-}(this));
+
+    // Add new wrapper for browsers that don't have performance
+    if (!hasPerformance) {
+        // Store reference to existing rAF and initial startTime
+        var rAF = window.requestAnimationFrame,
+            startTime = +new Date;
+
+        // Override window rAF to include wrapped callback
+        window.requestAnimationFrame = function (callback, element) {
+            // Wrap the given callback to pass in performance timestamp
+            var wrapped = function (timestamp) {
+                // Get performance-style timestamp
+                var performanceTimestamp = (timestamp < 1e12) ? timestamp : timestamp - startTime;
+
+                return callback(performanceTimestamp);
+            };
+
+            // Call original rAF with wrapped callback
+            rAF(wrapped, element);
+        }
+    }
+})();
 
 
 /**
