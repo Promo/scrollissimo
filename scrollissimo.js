@@ -213,7 +213,7 @@ function Scrollissimo(callback){
                 render: tweenRender.bind(this,
                     p.start,
                     p.duration,
-                    (animation.function || function(progress){
+                    (animation.func || function(progress){
                         setCSSProperty(animation.target, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
                     }).bind(animation.target)
                 ),
