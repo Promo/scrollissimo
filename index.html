@@ -91,8 +91,8 @@
                 {
                     target: header,
                     function: function(progress){
-                        var blur = (progress * 30).toFixed(2);
-                        blurissimo(this.target, blur);
+                        var blur = (progress * 3).toFixed(2);
+                        blurissimo(this, blur);
                     },
                     start: '0',
                     duration: '10%'
