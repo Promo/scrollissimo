@@ -91,7 +91,7 @@
                 {
                     target: header,
                     function: function(progress){
-                        var blur = progress.toFixed(3) * 30;
+                        var blur = (progress * 30).toFixed(3);
                         blurissimo(this.target, blur);
                     },
                     start: '0',
@@ -120,7 +120,7 @@
                 target.style.filter = 'blur(' + strength + 'px)';
 
                 if(ie && !window.atob){
-                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength + '\')';
+                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + Math.round(strength.toFixed(2)) + '\')';
                 }
             }
             if(typeof target.style.webikitFilter !== 'undefined'){
