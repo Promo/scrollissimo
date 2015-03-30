@@ -466,13 +466,9 @@ function Scrollissimo(callback){
     });
 
     if(typeof window.ontouchstart !== 'undefined'){
-        var scrollStrength = 1,
-            vHeight = Number(window.innerHeight) || window.innerHeight;
-        console.log('touch detected');
 
         (function(){
-            var isTouching = false,
-                lastTouch = 0;
+            var lastTouch = 0;
 
             addEvent(document.body, 'touchstart', function(e){
                 lastTouch = e.touches[0].clientY;
@@ -481,8 +477,6 @@ function Scrollissimo(callback){
                 var delta = lastTouch - e.touches[0].clientY;
 
                 lastTouch = e.touches[0].clientY;
-
-                console.log(e.touches[0].clientY);
 
                 $(document).scrollTop($(document).scrollTop() + delta);
 
