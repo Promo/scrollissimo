@@ -1,18 +1,18 @@
 /* requestAnimationFrame polyfill */
-(function () {
+(function(){
     var lastTime = 0,
         vendors = ['ms', 'moz', 'webkit', 'o'],
     // Feature check for performance (high-resolution timers)
         hasPerformance = !!(window.performance && window.performance.now);
 
-    for(var x = 0, max = vendors.length; x < max && !window.requestAnimationFrame; x += 1) {
+    for(var x = 0, max = vendors.length; x < max && !window.requestAnimationFrame; x += 1){
         window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
         window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
         || window[vendors[x]+'CancelRequestAnimationFrame'];
     }
 
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
+    if(!window.requestAnimationFrame){
+        window.requestAnimationFrame = function(callback, element){
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
             var id = window.setTimeout(function() { callback(currTime + timeToCall); },
@@ -22,22 +22,22 @@
         };
     }
 
-    if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function(id) {
+    if(!window.cancelAnimationFrame){
+        window.cancelAnimationFrame = function(id){
             clearTimeout(id);
         };
     }
 
     // Add new wrapper for browsers that don't have performance
-    if (!hasPerformance) {
+    if(!hasPerformance){
         // Store reference to existing rAF and initial startTime
         var rAF = window.requestAnimationFrame,
             startTime = +new Date;
 
         // Override window rAF to include wrapped callback
-        window.requestAnimationFrame = function (callback, element) {
+        window.requestAnimationFrame = function(callback, element){
             // Wrap the given callback to pass in performance timestamp
-            var wrapped = function (timestamp) {
+            var wrapped = function(timestamp){
                 // Get performance-style timestamp
                 var performanceTimestamp = (timestamp < 1e12) ? timestamp : timestamp - startTime;
 
@@ -49,32 +49,6 @@
         }
     }
 })();
-
-//bind polyfill
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function(oThis) {
-        if (typeof this !== 'function') {
-            // closest thing possible to the ECMAScript 5
-            // internal IsCallable function
-            throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
-        }
-
-        var aArgs   = Array.prototype.slice.call(arguments, 1),
-            fToBind = this,
-            fNOP    = function() {},
-            fBound  = function() {
-                return fToBind.apply(this instanceof fNOP && oThis
-                        ? this
-                        : oThis,
-                    aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-
-        fNOP.prototype = this.prototype;
-        fBound.prototype = new fNOP();
-
-        return fBound;
-    };
-}
 
 /**
  * Scrollissimo initialization
@@ -265,7 +239,7 @@ function Scrollissimo(callback){
 
     function tweenRender(start, duration, render, progress){
         var tweenProgress = (progress - start) / duration;
-        console.log(render);
+
         if (tweenProgress > 0 && tweenProgress < 1){
             render(tweenProgress);
         }else if (tweenProgress >= 1){
@@ -481,22 +455,53 @@ function Scrollissimo(callback){
         queues.forEach(function(queue){
             queue.forEach(function(tween){
                 tween.recalc(docHeight);
-                console.log(tween);
             });
         });
         //...for smooth queues too
         smoothQueues.forEach(function(queue){
             queue.forEach(function(tween){
                 tween.recalc(docHeight);
-                console.log(tween);
             });
         });
     });
 
-    addEvent(window, 'scroll', function(){
-        scrollCatcher.call(S);
-        setTimeout(function(){ scrollCatcher.call(S) }, 100);
-    });
+    if(typeof window.ontouchstart !== 'undefined'){
+        var scrollStrength = 1,
+            vHeight = Number(window.innerHeight) || window.innerHeight;
+        console.log('touch detected');
+
+        (function(){
+            var isTouching = false,
+                lastTouch = 0;
+
+            addEvent(document.body, 'touchstart', function(e){
+                lastTouch = e.touches[0].clientY;
+            });
+            addEvent(document.body, 'touchmove', function(e){
+                var delta = lastTouch - e.touches[0].clientY;
+
+                lastTouch = e.touches[0].clientY;
+
+                console.log(e.touches[0].clientY);
+
+                $(document).scrollTop($(document).scrollTop() + delta);
+
+                scrollCatcher.call(S);
+                setTimeout(function(){ scrollCatcher.call(S) }, 100);
+
+                e.preventDefault();
+                return false;
+            });
+            addEvent(document.body, 'touchend', function(e){
+                lastTouch = e.pageY;
+            });
+        })();
+    }else{
+        addEvent(window, 'scroll', function(){
+            scrollCatcher.call(S);
+            setTimeout(function(){ scrollCatcher.call(S) }, 100);
+        });
+    }
 
     function scrollCatcher(){
 
