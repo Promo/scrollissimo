@@ -130,7 +130,7 @@
 
             if(typeof target.style.filter !== 'undefined'){
                 if(ie){
-                    if(needSVG){
+                    if(!needSVG){
                         target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength * 10 + '\')';
                     }else{
                         (blurEl = blurEl || createBlurElement()).setAttribute('stdDeviation', strength);
