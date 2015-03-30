@@ -111,11 +111,31 @@
     };
 
     (function(w){
-        var ie = (!!document.all);
+        var ie = (!!document.all),
+            needSVG = !!window.atob,
+            blurEl;
+
+        function createBlurElement(strength){
+            var blurEl = document.createElement('svg');
+
+            strength = Number(strength) || 1;
+            blurEl.innerHTML = '<svg id="svg-effects"><filter id="blurissimo"><feGaussianBlur stdDeviation="' + strength + '" /></filter></svg>';
+
+            document.body.appendChild(blurEl);
+
+            return blurEl.getElementsByTagName('feGaussianBlur')[0];
+        }
+
         w.blurissimo = function(target, strength){
+
             if(typeof target.style.filter !== 'undefined'){
-                if(ie && !window.atob){
-                    target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength * 10 + '\')';
+                if(ie){
+                    if(needSVG){
+                        target.style.filter = 'progid:DXImageTransform.Microsoft.Blur(PixelRadius=\'' + strength * 10 + '\')';
+                    }else{
+                        (blurEl = blurEl || createBlurElement()).setAttribute('stdDeviation', strength);
+                        target.style.filter = 'url(#blurissimo)';
+                    }
                 }else{
                     target.style.filter = 'blur(' + strength + 'px)';
                 }
