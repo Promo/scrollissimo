@@ -3,6 +3,9 @@
 <head lang="en">
     <meta charset="utf-8">
     <title>Scrollissimo</title>
+    <!--[if lt IE 10]>
+    https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-sham.min.js
+    <![endif]-->
     <!--[if lt IE 9]>
         <script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -21,6 +24,7 @@
         var screen1 = document.getElementById('screen1'),
             indicator = document.getElementById('indicator'),
             header = document.getElementById('header');
+
         //initialize Scrollissimo
         Scrollissimo(function(){
             this.add([
@@ -116,8 +120,8 @@
                     target.style.filter = 'blur(' + strength + 'px)';
                 }
             }
-            if(typeof target.style.webikitFilter !== 'undefined'){
-                target.style.webikitFilter = 'blur(' + strength + 'px)';
+            if(typeof target.style.webkitFilter !== 'undefined'){
+                target.style.webkitFilter = 'blur(' + strength + 'px)';
             }
         }
     })(this);
