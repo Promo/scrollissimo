@@ -44,14 +44,12 @@
             });
 
             S._on(document.body, 'touchend', function(e){
-                if(Math.abs(distance) > 100 && Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 200){
-                    var interval = (lastScrollTime - startTime) / 100;
+                if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 200){
+                    var interval = (lastScrollTime - startTime);
 
-                    if(interval > 1){
-                        velocity = distance / interval;
-                        if(Math.abs(velocity) > 20){
-                            S._requestAnimationFrame(scrollStep);
-                        }
+                    velocity = distance / interval * 10;
+                    if((interval > 100) || Math.abs(distance) > 100){
+                        S._requestAnimationFrame(scrollStep);
                     }
                 }
                 distance = 0;
