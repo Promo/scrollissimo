@@ -13,7 +13,7 @@
     if(S){
         if(S.isTouchMode){
             S.Touch = {
-                scrollStrength: 2,
+                scrollStrength: 1,
                 friction: .9
             };
 
@@ -47,9 +47,11 @@
                 if(Math.abs(distance) > 100 && Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 200){
                     var interval = (lastScrollTime - startTime) / 100;
 
-                    velocity = distance / interval;
-                    if(Math.abs(velocity) > 20){
-                        S._requestAnimationFrame(scrollStep);
+                    if(interval > 1){
+                        velocity = distance / interval;
+                        if(Math.abs(velocity) > 20){
+                            S._requestAnimationFrame(scrollStep);
+                        }
                     }
                 }
                 distance = 0;
