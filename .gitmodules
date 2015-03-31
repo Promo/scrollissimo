@@ -1,3 +1,6 @@
 [submodule "scrollissimo"]
 	path = scrollissimo
 	url = https://github.com/frux/scrollissimo.git
+[submodule "scroller"]
+	path = scroller
+	url = https://github.com/zynga/scroller.git
