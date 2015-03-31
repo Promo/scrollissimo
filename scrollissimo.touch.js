@@ -34,6 +34,9 @@
                             startTime = lastScrollTime;
                             distance = 0;
                         }else{
+                            if(distance * delta < 0){
+                                distance = 0;
+                            }
                             distance += delta;
                         }
                         scrollBy(delta * S.Touch.scrollStrength);
@@ -49,9 +52,8 @@
                     var interval = (lastScrollTime - startTime);
 
                     velocity = distance / interval * 100;
-                    if((interval > 100) && Math.abs(distance) > 50){
-                        S._requestAnimationFrame(scrollStep);
-                    }
+
+                    S._requestAnimationFrame(scrollStep);
                 }
                 distance = 0;
                 startTime = 0;
@@ -59,7 +61,7 @@
         }
 
         function scrollStep(){
-            if(Math.abs(velocity) > 1){
+            if(Math.abs(velocity) > 10){
                 velocity = (velocity * S.Touch.friction);
                 scrollBy(velocity);
                 S._requestAnimationFrame(scrollStep);
