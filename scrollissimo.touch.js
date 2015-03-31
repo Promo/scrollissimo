@@ -44,8 +44,8 @@
             });
 
             S._on(document.body, 'touchend', function(e){
-                if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 200){
-                    var interval = (+new Date - startTime) / 100;
+                if(Math.abs(distance) > 100 && Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 200){
+                    var interval = (lastScrollTime - startTime) / 100;
 
                     velocity = distance / interval;
                     if(Math.abs(velocity) > 20){
