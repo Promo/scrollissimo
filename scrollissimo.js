@@ -1,98 +1,68 @@
-/* requestAnimationFrame polyfill */
-(function(){
-    var lastTime = 0,
-        vendors = ['ms', 'moz', 'webkit', 'o'],
-    // Feature check for performance (high-resolution timers)
-        hasPerformance = !!(window.performance && window.performance.now);
-
-    for(var x = 0, max = vendors.length; x < max && !window.requestAnimationFrame; x += 1){
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-        || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
-
-    if(!window.requestAnimationFrame){
-        window.requestAnimationFrame = function(callback, element){
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-                timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-    }
-
-    if(!window.cancelAnimationFrame){
-        window.cancelAnimationFrame = function(id){
-            clearTimeout(id);
-        };
-    }
-
-    // Add new wrapper for browsers that don't have performance
-    if(!hasPerformance){
-        // Store reference to existing rAF and initial startTime
-        var rAF = window.requestAnimationFrame,
-            startTime = +new Date;
-
-        // Override window rAF to include wrapped callback
-        window.requestAnimationFrame = function(callback, element){
-            // Wrap the given callback to pass in performance timestamp
-            var wrapped = function(timestamp){
-                // Get performance-style timestamp
-                var performanceTimestamp = (timestamp < 1e12) ? timestamp : timestamp - startTime;
-
-                return callback(performanceTimestamp);
-            };
-
-            // Call original rAF with wrapped callback
-            rAF(wrapped, element);
-        }
-    }
-})();
-
 /**
- * Scrollissimo initialization
- * @param callback {Function} Initialization end's callback
- * @returns {Scrollissimo} Scrollissimo object
- * @Singletone
+ * Scrollissimo
+ * Javascript plugin for scroll animation
+ * @author frux
  */
-function Scrollissimo(callback){
-    var S = {}, //S is for Scrollissimo
-        lastScroll = 0, //to check if document was scrolled
-        docHeight = getDocumentHeight() || 0, //document height
-        windowHeight = Number(window.innerHeight) || window.innerHeight, //window height
-        smoothQueues = [], //all animations with smooth effect
-        queues = [], //all other animations queues
+
+(function(global){
+    var Scrollissimo = {},
+        lastScroll = 0,
+        windowHeight = Scrollissimo._getWinHeight,
+        smoothQueues = [],
+        queues = [],
+        docHeight,
         getScrollTop,
-        setCSSProperty;
+        setCSS;
 
-    /**
-     * addEventListener polyfill
-     * @param obj {Object} Event target
-     * @param eventName {String} Event name
-     * @param fn {Function} Event handler
-     */
-    function addEvent(obj, eventName, fn){
-        if(obj.addEventListener){
-            obj.addEventListener(eventName, fn, false);
+    /* requestAnimationFrame polyfill */
+    (function(){
+        var lastTime = 0,
+            vendors = ['ms', 'moz', 'webkit', 'o'],
+            max = vendors.length, x,
+            // Feature check for performance (high-resolution timers)
+            hasPerformance = !!(global.performance && global.performance.now);
+
+
+        if(!global.requestAnimationFrame){
+            for(x = 0; x < max && !global.requestAnimationFrame; x += 1){
+                console.log(x, max);
+                Scrollissimo._requestAnimationFrame = global[vendors[x]+'RequestAnimationFrame'].bind(global);
+            }
+            if(!Scrollissimo._requestAnimationFrame){
+                Scrollissimo._requestAnimationFrame = (function(callback){
+                    var currTime = new Date().getTime();
+                    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                    var id = global.setTimeout(function() { callback(currTime + timeToCall); },
+                        timeToCall);
+                    lastTime = currTime + timeToCall;
+                    return id;
+                }).bind(global);
+            }
         }else{
-            obj.attachEvent("on" + eventName, fn);
+            Scrollissimo._requestAnimationFrame = global.requestAnimationFrame.bind(global);
         }
-    }
 
-    /**
-     * Calculate document's height
-     * @returns {Number} Height of document
-     */
-    function getDocumentHeight(){
-        var documentElement = document.documentElement,
-            documentBody = document.body;
-        return Math.max(
-            documentBody.scrollHeight, documentElement.scrollHeight,
-            documentBody.offsetHeight, documentElement.offsetHeight,
-            documentBody.clientHeight, documentElement.clientHeight
-        );
-    }
+        // Add new wrapper for browsers that don't have performance
+        if(!hasPerformance){
+            // Store reference to existing rAF and initial startTime
+            var rAF = Scrollissimo._requestAnimationFrame,
+                startTime = +new Date;
+
+            // Override window rAF to include wrapped callback
+            Scrollissimo._requestAnimationFrame = function(callback, element){
+                // Wrap the given callback to pass in performance timestamp
+                var wrapped = function(timestamp){
+                    // Get performance-style timestamp
+                    var performanceTimestamp = (timestamp < 1e12) ? timestamp : timestamp - startTime;
+
+                    return callback(performanceTimestamp);
+                };
+
+                // Call original rAF with wrapped callback
+                rAF(wrapped, element);
+            }
+        }
+    })();
 
     /**
      * Get intersection of custom numbers ranges
@@ -125,6 +95,46 @@ function Scrollissimo(callback){
     }
 
     /**
+     * addEventListener and attachEvent wrapper
+     * @param obj {Object} Event target
+     * @param event {String} Event name
+     * @param fn {Function} Event handler
+     * @private
+     */
+    Scrollissimo._on = function(obj, event, fn){
+        if(obj.addEventListener){
+            obj.addEventListener(event, fn, false);
+        }else{
+            obj.attachEvent("on" + event, fn);
+        }
+    };
+
+    /**
+     * Calculate document's height
+     * @returns {Number} Height of document
+     */
+    Scrollissimo._getDocHeight = function(){
+        var documentElement = document.documentElement,
+            documentBody = document.body;
+        return Math.max(
+            documentBody.scrollHeight, documentElement.scrollHeight,
+            documentBody.offsetHeight, documentElement.offsetHeight,
+            documentBody.clientHeight, documentElement.clientHeight
+        );
+    };
+
+    /**
+     * Calculate window's height
+     * @returns {Number} Height of window
+     */
+    Scrollissimo._getWinHeight = function(){
+        return Number(global.innerHeight) || Number(global.clientHeight);
+    };
+
+    docHeight = Scrollissimo._getDocHeight();
+    windowHeight = Scrollissimo._getWinHeight();
+
+    /**
      * Calculate current scrolling value for a bottom edge of window
      * @returns {Number} Length of scrolled area in pixels
      */
@@ -139,18 +149,17 @@ function Scrollissimo(callback){
     }
 
     //if jQuery included use $.fn.css to set properties
-    if(window.jQuery){
-        setCSSProperty = function(target, property, value){
+    if(global.jQuery){
+        setCSS = function(target, property, value){
             $(target).css(property, value);
         }
 
         //else use standard element.style.setProperty
     }else{
-        setCSSProperty = function(target, property, value){
+        setCSS = function(target, property, value){
             target.style.setProperty(property, value);
         }
     }
-
 
     /**
      * Converts pixels in percents related to a document's height
@@ -172,7 +181,7 @@ function Scrollissimo(callback){
                 return (parseInt(px) / documentHeight);
             }
             //otherwise parse as percents
-            return parseInt(px) / getDocumentHeight();
+            return parseInt(px) / Scrollissimo._getDocHeight();
 
             //else if it isn't even a number
         }else if(!isNaN(px)){
@@ -213,11 +222,11 @@ function Scrollissimo(callback){
                     p.start,
                     p.duration,
                     (animation.func || function(progress){
-                        setCSSProperty(animation.target, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
+                        setCSS(animation.target, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
                     }).bind(animation.target)
                 ),
                 recalc: function(docHeight){
-                    docHeight = docHeight || getDocumentHeight();
+                    docHeight = docHeight || Scrollissimo._getDocHeight();
 
                     this.params.duration = toPercents(this.sourceParams.duration || '', docHeight);
                     if(typeof (this.sourceParams.start) === 'undefined'){
@@ -237,6 +246,13 @@ function Scrollissimo(callback){
         }
     }
 
+    /**
+     * Call render function throwing normalized progress value
+     * @param start
+     * @param duration
+     * @param render
+     * @param progress
+     */
     function tweenRender(start, duration, render, progress){
         var tweenProgress = (progress - start) / duration;
 
@@ -250,178 +266,145 @@ function Scrollissimo(callback){
     }
 
     /**
-     * Animation queue class
-     * @extends Array
-     * @namespace S
-     * @constructor
+     * Scrollissimo Queue class
      */
-    S.Queue = function(maxSpeed){
-        //total duration of  this queue's animations
-        this.start = 0;
-        this.end = 0;
+    (function(S){
+        /**
+         * Animation queue class
+         * @extends Array
+         * @namespace Srollissimo
+         * @constructor
+         */
+        S.Queue = function(maxSpeed){
+            //total duration of  this queue's animations
+            this.start = 0;
+            this.end = 0;
 
-        !isNaN(maxSpeed) && (this.smoother = new S.Queue.Smoother(this, maxSpeed));
-    };
+            !isNaN(maxSpeed) && (this.smoother = new S.Queue.Smoother(this, maxSpeed));
+        };
 
-    //queue actually is extended array
-    S.Queue.prototype = Array.prototype.slice.call(Array.prototype);
+        //queue actually is just extended array
+        S.Queue.prototype = Array.prototype.slice.call(Array.prototype);
 
-    /**
-     * Add animation to the queue
-     * @param animations {Object|Array} Animation object or array of animation objects
-     * @returns {S.Queue|undefined}
-     */
-    S.Queue.prototype.add = function(animations){
+        /**
+         * Add animation to the queue
+         * @param animations {Object|Array} Animation object or array of animation objects
+         * @returns {Scrollissimo.Queue|undefined}
+         */
+        S.Queue.prototype.add = function(animations){
 
-        if(!(animations instanceof Array)){
-            if(typeof animations === 'object'){
-                animations = [animations];
-            }else return;
-        }
+            if(!(animations instanceof Array)){
+                if(typeof animations === 'object'){
+                    animations = [animations];
+                }else return;
+            }
 
-        animations.forEach((function(animation){
-            var tween = makeTween(animation, this);
+            animations.forEach((function(animation){
+                var tween = makeTween(animation, this);
 
-            if(tween){
-                this.push(tween);
-                if(this.end < tween.params.start + tween.params.duration){
-                    this.end = tween.params.start + tween.params.duration;
+                if(tween){
+                    this.push(tween);
+                    if(this.end < tween.params.start + tween.params.duration){
+                        this.end = tween.params.start + tween.params.duration;
+                    }
                 }
-            }
-        }).bind(this));
+            }).bind(this));
 
-        this.sort(function(a, b){
-            return a.params.duration - b.params.duration;
-        });
+            this.sort(function(a, b){
+                return a.params.duration - b.params.duration;
+            });
 
-        this.start = (this[0] && this[0].params.start) || 0;
+            this.start = (this[0] && this[0].params.start) || 0;
 
-        //return for chaining
-        return this;
-    };
-
-    /**
-     * Get intersection of custom numbers range and queue duration range
-     * @param lastProgress {Number}
-     * @param progress {Number}
-     * @returns {{from: Number, to: Number}|undefined}
-     */
-    S.Queue.prototype.getIntersection = function(lastProgress, progress){
-        return getIntersection(this.start, this.end, lastProgress, progress);
-    };
-
-    /**
-     * Queue smoother class
-     * @param queue {S.Queue} Queue to smooth
-     * @param maxSpeed {Number} Max percents of page's height animation can play on one requestAnimationFrame tick
-     * @constructor
-     */
-    S.Queue.Smoother = function(queue, maxSpeed){
-        this.status = 'idle';
-        this.animateFrom = 0;
-        this.animateTo = 0;
-        this.maxSpeed = +maxSpeed;
-        this.queue = queue;
-    };
-
-    /**
-     * Render specified progress of current queue's animations
-     * @param lastProgress {Number} Last progress value
-     * @param progress {Number} Current progress value
-     */
-    S.Queue.Smoother.prototype.render = function(lastProgress, progress){
-        this.queue.forEach(function(tween){
-            var intersection = tween.getIntersection(lastProgress, progress);
-            if(intersection){
-                tween.render(intersection.to);
-            }
-        });
-    };
-
-    /**
-     * Smoother's tick function
-     */
-    S.Queue.Smoother.prototype.step = function(){
-        var delta = this.animateTo - this.animateFrom;
-
-        if(Math.abs(delta) > this.maxSpeed){
-            this.render(this.animateFrom, this.animateFrom += this.maxSpeed * (delta > 0 ? 1 : -1));
-            requestAnimationFrame(this.step.bind(this));
-        }else{
-            this.render(this.animateFrom, this.animateTo);
-            this.status = 'idle';
-            this.animateFrom = this.animateTo;
-        }
-    };
-
-    /**
-     * Smooth jump from last progress value to current one
-     * @param from {Number} Last progress value
-     * @param to {Number} Current progress value
-     */
-    S.Queue.Smoother.prototype.smooth = function(from, to){
-        var intersection = this.queue.getIntersection(from, to);
-
-        //Check if current scrolling intersects this queue
-        if(intersection){
-            //set finish value
-            this.animateTo = intersection.to;
-            //if Smoother is not ran run it
-            if(this.status === 'idle'){
-                //set playing status
-                this.status = 'busy';
-                //tick
-                requestAnimationFrame(this.step.bind(this));
-            }
-            this.id = requestAnimationFrame(this.step.bind(this));
+            //return for chaining
             return this;
         };
 
         /**
-         * Smoothly run each tween
+         * Get intersection of custom numbers range and queue duration range
+         * @param lastProgress {Number}
+         * @param progress {Number}
+         * @returns {{from: Number, to: Number}|undefined}
          */
-        S.Queue.Smoother.smooth = (function(progress){
-            var self = this;
-            smoothQueues.forEach(function(queue){
-                queue.forEach(function(tween){
-                    var intersection = tween.getIntersection.call(tween, lastProgress, progress);
+        S.Queue.prototype.getIntersection = function(lastProgress, progress){
+            return getIntersection(this.start, this.end, lastProgress, progress);
+        };
 
-                    if(intersection && (intersection.from !== intersection.to)){
-                        if((!tween.animator && (tween.animator = new self.Animator(tween))) || tween.animator.status !== 'playing'){
-                            tween.animator.animateTo = intersection.to;
-                            tween.animator.run();
-                        }else{
-                            tween.animator.animateTo = intersection.to;
-                        }
-                    }
-                });
+        /**
+         * Queue smoother class
+         * @param queue {S.Queue} Queue to smooth
+         * @param maxSpeed {Number} Max percents of page's height animation can play on one requestAnimationFrame tick
+         * @constructor
+         */
+        S.Queue.Smoother = function(queue, maxSpeed){
+            this.status = 'idle';
+            this.animateFrom = 0;
+            this.animateTo = 0;
+            this.maxSpeed = +maxSpeed;
+            this.queue = queue;
+        };
+
+        /**
+         * Render specified progress of current queue's animations
+         * @param lastProgress {Number} Last progress value
+         * @param progress {Number} Current progress value
+         */
+        S.Queue.Smoother.prototype.render = function(lastProgress, progress){
+            this.queue.forEach(function(tween){
+                var intersection = tween.getIntersection(lastProgress, progress);
+                if(intersection){
+                    tween.render(intersection.to);
+                }
             });
+        };
 
-            lastProgress = progress;
-        }).bind(S.Smoother);
-    };
+        /**
+         * Smoother's tick function
+         */
+        S.Queue.Smoother.prototype.step = function(){
+            var delta = this.animateTo - this.animateFrom;
+
+            if(Math.abs(delta) > this.maxSpeed){
+                this.render(this.animateFrom, this.animateFrom += this.maxSpeed * (delta > 0 ? 1 : -1));
+                S._requestAnimationFrame(this.step.bind(this));
+            }else{
+                this.render(this.animateFrom, this.animateTo);
+                this.status = 'idle';
+                this.animateFrom = this.animateTo;
+            }
+        };
+
+        /**
+         * Smooth jump from last progress value to current one
+         * @param from {Number} Last progress value
+         * @param to {Number} Current progress value
+         */
+        S.Queue.Smoother.prototype.smooth = function(from, to){
+            var intersection = this.queue.getIntersection(from, to);
+
+            //Check if current scrolling intersects this queue
+            if(intersection){
+                //set finish value
+                this.animateTo = intersection.to;
+                //if Smoother is not ran run it
+                if(this.status === 'idle'){
+                    //set playing status
+                    this.status = 'busy';
+                    //tick
+                    S._requestAnimationFrame(this.step.bind(this));
+                }
+                this.id = S._requestAnimationFrame(this.step.bind(this));
+                return this;
+            }
+        };
+    })(Scrollissimo);
 
     /**
-     * Create new queue and add animation(s) to the beginning
-     * @param animations {Object|Array} Target of animation or array of animations
-     * return {S.Queue}
+     * Render all animation queues
+     * @private
      */
-    S.add = (function(animations, maxSpeed){
-        var newQueue;
+    Scrollissimo._render = (function(progress){
 
-        //if specified one animation instead of array wrp it by array
-        animations = animations || [];
-
-        //create new Queue and add animtion to the beginning
-        newQueue = new this.Queue(maxSpeed).add(animations);
-
-        //add new queue to all queues
-        (maxSpeed ? smoothQueues : queues).push(newQueue);
-
-        return newQueue;
-    }).bind(S);
-
-    S.render = (function(progress){
         //for each animation's queues
         queues.forEach(function(queue){
 
@@ -434,22 +417,61 @@ function Scrollissimo(callback){
         });
 
         smoothQueues.forEach(function(queue){
-            queue.smoother.smooth(S.lastProgress, progress);
+            queue.smoother.smooth(Scrollissimo.lastProgress, progress);
         });
 
-        S.lastProgress= progress;
-    }).bind(S);
+        Scrollissimo.lastProgress= progress;
+    }).bind(Scrollissimo);
 
-    S.lastProgress = 0;
+    Scrollissimo.lastProgress = 0;
 
-    //every time window will be resized
-    addEvent(window, 'resize', function(){
+    Scrollissimo._catch = function(){
+        var scrollTop = getScrollTop(), //calculate current scroll
+            progress = scrollTop / (docHeight - windowHeight); //calculate current scroll progress
+
+        //if it's not a fake calling
+        if(scrollTop !== lastScroll){
+            //render animations
+            this._render(progress);
+        }
+
+        //remember current progress value
+        lastScroll = scrollTop;
+    };
+
+    /**
+     * Create new queue and add animation(s) to the beginning
+     * @param animations {Object|Array} Target of animation or array of animations
+     * return {S.Queue}
+     */
+    Scrollissimo.add = (function(animations, maxSpeed){
+        var newQueue;
+
+        //if specified one animation instead of array wrp it by array
+        animations = animations || [];
+
+        //create new Queue and add animtion to the beginning
+        newQueue = new this.Queue(maxSpeed).add(animations);
+
+        //add new queue to all queues
+        (maxSpeed ? smoothQueues : queues).push(newQueue);
+
+        return newQueue;
+    }).bind(Scrollissimo);
+
+    Scrollissimo.knock = function(){
+        this._catch();
+        setTimeout(this._catch.bind(this), 100);
+    };
+
+    //every time window has been resized
+    Scrollissimo._on(window, 'resize', function(){
 
         //calculate new window height
-        windowHeight = Number(window.innerHeight) || window.innerHeight;
+        windowHeight = Scrollissimo._getWinHeight();
 
         //calculate new document height
-        docHeight = getDocumentHeight();
+        docHeight = Scrollissimo._getDocHeight();
 
         //run recalculate method of each tween
         queues.forEach(function(queue){
@@ -457,6 +479,7 @@ function Scrollissimo(callback){
                 tween.recalc(docHeight);
             });
         });
+
         //...for smooth queues too
         smoothQueues.forEach(function(queue){
             queue.forEach(function(tween){
@@ -465,53 +488,7 @@ function Scrollissimo(callback){
         });
     });
 
-    if(typeof window.ontouchstart !== 'undefined'){
+    Scrollissimo.isTouchMode = ('ontouchstart' in document.body);
 
-        (function(){
-            var lastTouch = 0;
-
-            addEvent(document.body, 'touchstart', function(e){
-                lastTouch = e.touches[0].clientY;
-            });
-            addEvent(document.body, 'touchmove', function(e){
-                var delta = lastTouch - e.touches[0].clientY;
-
-                lastTouch = e.touches[0].clientY;
-
-                $(document).scrollTop($(document).scrollTop() + delta);
-
-                scrollCatcher.call(S);
-                setTimeout(function(){ scrollCatcher.call(S) }, 100);
-
-                e.preventDefault();
-                return false;
-            });
-            addEvent(document.body, 'touchend', function(e){
-                lastTouch = e.pageY;
-            });
-        })();
-    }else{
-        addEvent(window, 'scroll', function(){
-            scrollCatcher.call(S);
-            setTimeout(function(){ scrollCatcher.call(S) }, 100);
-        });
-    }
-
-    function scrollCatcher(){
-
-        var scrollTop = getScrollTop(), //calculate current scroll
-            progress = scrollTop / (docHeight - windowHeight); //calculate current scroll progress
-
-        //if it's not a fake calling
-        if(scrollTop !== lastScroll){
-            //render animations
-            this.render(progress);
-        }
-
-        //remember current progress value
-        lastScroll = scrollTop;
-    }
-
-    (callback || function(){}).call(S);
-    return S;
-}
+    global.Scrollissimo = Scrollissimo;
+})(this);
