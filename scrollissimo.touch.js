@@ -30,7 +30,7 @@
                     var delta = lastScrollTop - (lastScrollTop = e.touches[0].clientY);
 
                     if((lastDelta * (lastDelta = delta)) >= 0){
-                        if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) > 500){
+                        if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) > 200){
                             startTime = lastScrollTime;
                         }else{
                             distance += delta;
@@ -44,12 +44,14 @@
             });
 
             S._on(document.body, 'touchend', function(e){
-                var interval = (+new Date - startTime) / 100;
+                if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 200){
+                    var interval = (+new Date - startTime) / 100;
 
-                velocity = distance / interval;
-
-                S._requestAnimationFrame(scrollStep);
-
+                    velocity = distance / interval;
+                    if(Math.abs(velocity) > 20){
+                        S._requestAnimationFrame(scrollStep);
+                    }
+                }
                 distance = 0;
                 startTime = 0;
             });
