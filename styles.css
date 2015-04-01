@@ -30,12 +30,10 @@ html
 
     background: #00557a;
 }
-.screen_num_1
-{
-}
+
 .screen_num_1 .header
 {
-    font: 0px/1 Arial, Helvetica, sans-serif;
+    font: 0/1 Arial, Helvetica, sans-serif;
 
     position: absolute;
     top: 50%;
