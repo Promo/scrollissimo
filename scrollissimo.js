@@ -207,6 +207,16 @@
             p.suffix = animation.suffix || '';
             p.duration = toPercents(animation.duration) || 0;
 
+            if(animation.target.jquery){
+                if(animation.target.length > 1){
+                    p.target = animation.target.get();
+                }else{
+                    p.target = animation.target.get(0);
+                }
+            }else{
+                p.target = animation.target;
+            }
+
             //if start is not specified set it to the end of queue
             if(typeof (p.start = toPercents(animation.start)) === 'undefined'){
                 p.start = queue.end;
@@ -222,8 +232,14 @@
                     p.start,
                     p.duration,
                     (animation.func || function(progress){
-                        setCSS(animation.target, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
-                    }).bind(animation.target)
+                        if(this.length){
+                            this.forEach(function(target){
+                                setCSS(target, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
+                            });
+                        }else{
+                            setCSS(this, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
+                        }
+                    }).bind(p.target)
                 ),
                 recalc: function(docHeight){
                     docHeight = docHeight || Scrollissimo._getDocHeight();
