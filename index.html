@@ -23,9 +23,9 @@
     <script src="scrollissimo/scrollissimo.touch.js"></script>
     <script>
         $(document).ready(function(){
-            var screen1 = document.getElementById('screen1'),
-                indicator = document.getElementById('indicator'),
-                header = document.getElementById('header');
+            var screen1 = $('#screen1'),
+                indicator = $('#indicator'),
+                header = $('#header');
 
             Scrollissimo.add([
                 {
@@ -37,7 +37,7 @@
                     start: '0',
                     duration: '5%'
                 },
-                {
+                 {
                     target: header,
                     property: 'text-shadow',
                     from: 0,
