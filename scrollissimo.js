@@ -114,8 +114,8 @@
      * @returns {Number} Height of document
      */
     Scrollissimo._getDocHeight = function(){
-        var documentElement = document.documentElement,
-            documentBody = document.body;
+        var documentElement = document.documentElement || {},
+            documentBody = document.body || {};
         return Math.max(
             documentBody.scrollHeight, documentElement.scrollHeight,
             documentBody.offsetHeight, documentElement.offsetHeight,
@@ -130,9 +130,6 @@
     Scrollissimo._getWinHeight = function(){
         return Number(global.innerHeight) || Number(global.clientHeight);
     };
-
-    docHeight = Scrollissimo._getDocHeight();
-    windowHeight = Scrollissimo._getWinHeight();
 
     /**
      * Calculate current scrolling value for a bottom edge of window
@@ -504,7 +501,12 @@
         });
     });
 
-    Scrollissimo.isTouchMode = ('ontouchstart' in document.body);
+    Scrollissimo.isTouchMode = ('ontouchstart' in window);
+
+    Scrollissimo._on(window, 'load', function(){
+        docHeight = Scrollissimo._getDocHeight();
+        windowHeight = Scrollissimo._getWinHeight();
+    });
 
     global.Scrollissimo = Scrollissimo;
 })(this);
