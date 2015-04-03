@@ -26,7 +26,7 @@
         if(!global.requestAnimationFrame){
             for(x = 0; x < max && !global.requestAnimationFrame; x += 1){
                 console.log(x, max);
-                Scrollissimo._requestAnimationFrame = global[vendors[x]+'RequestAnimationFrame'].bind(global);
+                Scrollissimo._requestAnimationFrame = global[vendors[x]+'RequestAnimationFrame'] && global[vendors[x]+'RequestAnimationFrame'].bind(global);
             }
             if(!Scrollissimo._requestAnimationFrame){
                 Scrollissimo._requestAnimationFrame = (function(callback){
@@ -166,7 +166,7 @@
      * @returns {Number} Value in percents
      */
     function toPercents(px, documentHeight){
-        documentHeight = documentHeight || docHeight;
+        documentHeight = documentHeight || docHeight || Scrollissimo._getDocHeight();
 
         //if is string
         if(typeof px === 'string'){
@@ -178,7 +178,7 @@
                 return (parseInt(px) / documentHeight);
             }
             //otherwise parse as percents
-            return parseInt(px) / Scrollissimo._getDocHeight();
+            return parseInt(px) / documentHeight;
 
             //else if it isn't even a number
         }else if(!isNaN(px)){
@@ -218,6 +218,7 @@
             if(typeof (p.start = toPercents(animation.start)) === 'undefined'){
                 p.start = queue.end;
             }
+
             p.queue = queue;
 
             return {
