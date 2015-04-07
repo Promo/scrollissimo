@@ -443,11 +443,7 @@
         var scrollTop = getScrollTop(), //calculate current scroll
             progress = scrollTop / (docHeight - windowHeight); //calculate current scroll progress
 
-        //if it's not a fake calling
-        if(scrollTop !== lastScroll){
-            //render animations
-            this._render(progress);
-        }
+        this._render(progress);
 
         //remember current progress value
         lastScroll = scrollTop;
