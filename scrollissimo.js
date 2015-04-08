@@ -4,28 +4,27 @@
  * @author frux
  */
 
-(function(global){
+(function(global, $){
     var Scrollissimo = {},
         lastScroll = 0,
-        windowHeight = Scrollissimo._getWinHeight,
+        windowHeight,
         smoothQueues = [],
         queues = [],
         docHeight,
-        getScrollTop,
-        setCSS;
+        getScrollTop, // @deprecated
+        setCSS; // @deprecated
 
     /* requestAnimationFrame polyfill */
     (function(){
         var lastTime = 0,
             vendors = ['ms', 'moz', 'webkit', 'o'],
             max = vendors.length, x,
-            // Feature check for performance (high-resolution timers)
+            //Feature check for performance (high-resolution timers)
             hasPerformance = !!(global.performance && global.performance.now);
 
 
         if(!global.requestAnimationFrame){
             for(x = 0; x < max && !global.requestAnimationFrame; x += 1){
-                console.log(x, max);
                 Scrollissimo._requestAnimationFrame = global[vendors[x]+'RequestAnimationFrame'] && global[vendors[x]+'RequestAnimationFrame'].bind(global);
             }
             if(!Scrollissimo._requestAnimationFrame){
@@ -42,23 +41,23 @@
             Scrollissimo._requestAnimationFrame = global.requestAnimationFrame.bind(global);
         }
 
-        // Add new wrapper for browsers that don't have performance
+        //Add new wrapper for browsers that don't have performance
         if(!hasPerformance){
-            // Store reference to existing rAF and initial startTime
+            //Store reference to existing rAF and initial startTime
             var rAF = Scrollissimo._requestAnimationFrame,
                 startTime = +new Date;
 
-            // Override window rAF to include wrapped callback
+            //Override window rAF to include wrapped callback
             Scrollissimo._requestAnimationFrame = function(callback, element){
-                // Wrap the given callback to pass in performance timestamp
+                //Wrap the given callback to pass in performance timestamp
                 var wrapped = function(timestamp){
-                    // Get performance-style timestamp
+                    //Get performance-style timestamp
                     var performanceTimestamp = (timestamp < 1e12) ? timestamp : timestamp - startTime;
 
                     return callback(performanceTimestamp);
                 };
 
-                // Call original rAF with wrapped callback
+                //Call original rAF with wrapped callback
                 rAF(wrapped, element);
             }
         }
@@ -99,6 +98,7 @@
      * @param obj {Object} Event target
      * @param event {String} Event name
      * @param fn {Function} Event handler
+     * @deprecated
      * @private
      */
     Scrollissimo._on = function(obj, event, fn){
@@ -112,6 +112,7 @@
     /**
      * Calculate document's height
      * @returns {Number} Height of document
+     * @deprecated
      */
     Scrollissimo._getDocHeight = function(){
         var documentElement = document.documentElement || {},
@@ -126,6 +127,7 @@
     /**
      * Calculate window's height
      * @returns {Number} Height of window
+     * @deprecated
      */
     Scrollissimo._getWinHeight = function(){
         return Number(global.innerHeight) || Number(global.clientHeight);
@@ -134,6 +136,7 @@
     /**
      * Calculate current scrolling value for a bottom edge of window
      * @returns {Number} Length of scrolled area in pixels
+     * @deprecated
      */
     if('pageYOffset' in window){
         getScrollTop = function(){
@@ -146,6 +149,7 @@
     }
 
     //if jQuery included use $.fn.css to set properties
+    // @deprecated
     if(global.jQuery){
         setCSS = function(target, property, value){
             $(target).css(property, value);
@@ -166,7 +170,7 @@
      * @returns {Number} Value in percents
      */
     function toPercents(px, documentHeight){
-        documentHeight = documentHeight || docHeight || Scrollissimo._getDocHeight();
+        documentHeight = documentHeight || docHeight || $(document).height();
 
         //if is string
         if(typeof px === 'string'){
@@ -204,15 +208,7 @@
             p.suffix = animation.suffix || '';
             p.duration = toPercents(animation.duration) || 0;
 
-            if(animation.target.jquery){
-                if(animation.target.length > 1){
-                    p.target = animation.target.get();
-                }else{
-                    p.target = animation.target.get(0);
-                }
-            }else{
-                p.target = animation.target;
-            }
+            p.target = (animation.target.jquery ? animation.target : $(animation.target));
 
             //if start is not specified set it to the end of queue
             if(typeof (p.start = toPercents(animation.start)) === 'undefined'){
@@ -223,24 +219,18 @@
 
             return {
                 animator: null,
-                target: animation.target,
+                target: p.target,
                 sourceParams: animation, //remember source params
                 params : p, //processed params
                 render: tweenRender.bind(this,
                     p.start,
                     p.duration,
                     (animation.func || function(progress){
-                        if(this.length){
-                            this.forEach(function(target){
-                                setCSS(target, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
-                            });
-                        }else{
-                            setCSS(this, p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
-                        }
+                        this.css(p.property, p.prefix + (p.from + (p.to - p.from) * (progress)) + p.suffix);
                     }).bind(p.target)
                 ),
                 recalc: function(docHeight){
-                    docHeight = docHeight || Scrollissimo._getDocHeight();
+                    docHeight = docHeight || $(document).height();
 
                     this.params.duration = toPercents(this.sourceParams.duration || '', docHeight);
                     if(typeof (this.sourceParams.start) === 'undefined'){
@@ -440,7 +430,7 @@
     Scrollissimo.lastProgress = 0;
 
     Scrollissimo._catch = function(customScrollTop){
-        var scrollTop = ( isNaN(customScrollTop) ? getScrollTop() : customScrollTop), //calculate current scroll
+        var scrollTop = ( isNaN(customScrollTop) ? $(document).scrollTop() : customScrollTop), //calculate current scroll
             progress = scrollTop / (docHeight - windowHeight); //calculate current scroll progress
 
         this._render(progress);
@@ -475,13 +465,13 @@
     };
 
     //every time window has been resized
-    Scrollissimo._on(window, 'resize', function(){
+    $(window).resize(function(){
 
         //calculate new window height
-        windowHeight = Scrollissimo._getWinHeight();
+        windowHeight = $(window).height();
 
         //calculate new document height
-        docHeight = Scrollissimo._getDocHeight();
+        docHeight = $(document).height();
 
         //run recalculate method of each tween
         queues.forEach(function(queue){
@@ -500,10 +490,10 @@
 
     Scrollissimo.isTouchMode = ('ontouchstart' in window);
 
-    Scrollissimo._on(window, 'load', function(){
-        docHeight = Scrollissimo._getDocHeight();
-        windowHeight = Scrollissimo._getWinHeight();
+    $(document).ready(function(){
+        docHeight = $(document).height();
+        windowHeight = $(window).height();
     });
 
     global.Scrollissimo = Scrollissimo;
-})(this);
+})(this, jQuery);

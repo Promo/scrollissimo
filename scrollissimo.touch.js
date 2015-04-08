@@ -2,7 +2,7 @@
  * Scrollissimo touch adapter
  * @author frux
  */
-(function(global){
+(function(global, $){
     var lastScrollTop = 0,
         lastDelta = 0,
         startTime = 0,
@@ -17,59 +17,58 @@
                 friction: .9
             };
 
-            S._on(document.body, 'touchstart', function(e){
+            $('body').touchstart(function(e){
                 velocity = 0;
                 if(e.targetTouches.length === 1){
                     lastScrollTop = e.touches[0].clientY;
                     lastDelta = 0;
                 }
-            });
+            })
+                .touchmove(function(e){
+                    if(e.targetTouches.length === 1){
+                        var delta = lastScrollTop - (lastScrollTop = e.touches[0].clientY);
 
-            S._on(document.body, 'touchmove', function(e){
-                if(e.targetTouches.length === 1){
-                    var delta = lastScrollTop - (lastScrollTop = e.touches[0].clientY);
-
-                    if((lastDelta * (lastDelta = delta)) >= 0){
-                        if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) > 100){
-                            startTime = lastScrollTime;
-                            distance = 0;
-                        }else{
-                            if(distance * delta < 0){
+                        if((lastDelta * (lastDelta = delta)) >= 0){
+                            if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) > 100){
+                                startTime = lastScrollTime;
                                 distance = 0;
+                            }else{
+                                if(distance * delta < 0){
+                                    distance = 0;
+                                }
+                                distance += delta;
                             }
-                            distance += delta;
+                            global.scrollBy(0, delta * S.Touch.scrollStrength);
+
+                            e.preventDefault();
+                            return false;
                         }
-                        scrollBy(delta * S.Touch.scrollStrength);
-
-                        e.preventDefault();
-                        return false;
                     }
-                }
-            });
+                })
+                .touchend(function(e){
+                    if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 100){
+                        var interval = (lastScrollTime - startTime);
 
-            S._on(document.body, 'touchend', function(e){
-                if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 100){
-                    var interval = (lastScrollTime - startTime);
+                        velocity = distance / interval * 100;
 
-                    velocity = distance / interval * 100;
-
-                    S._requestAnimationFrame(scrollStep);
-                }
-                distance = 0;
-                startTime = 0;
-            });
+                        S._requestAnimationFrame(scrollStep);
+                    }
+                    distance = 0;
+                    startTime = 0;
+                });
         }
 
         function scrollStep(){
             if(Math.abs(velocity) > 10){
                 velocity = (velocity * S.Touch.friction);
-                scrollBy(velocity);
+                global.scrollBy(0, velocity);
                 S._requestAnimationFrame(scrollStep);
             }
         }
     }
 
+    // @deprecated
     function scrollBy(scroll){
         document.body.scrollTop += Number(scroll);
     }
-})(this);
+})(this, jQuery);
