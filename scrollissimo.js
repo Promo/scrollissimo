@@ -1,6 +1,7 @@
 /**
  * Scrollissimo
  * Javascript plugin for scroll animation
+ * @version 0.1.0
  * @author frux
  */
 

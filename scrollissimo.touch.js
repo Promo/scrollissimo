@@ -45,7 +45,7 @@
                         }
                     }
                 })
-                .touchend(function(e){
+                .touchend(function(){
                     if(Math.abs(lastScrollTime - (lastScrollTime = +new Date)) < 100){
                         var interval = (lastScrollTime - startTime);
 
