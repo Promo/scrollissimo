@@ -294,7 +294,7 @@
             this.start = 0;
             this.end = 0;
 
-            !isNaN(maxSpeed) && (this.smoother = new S.Queue.Smoother(this, maxSpeed));
+            !isNaN(maxSpeed) && (this.smoother = new S.Queue.Smoother(this, maxSpeed * 0.001)); //0.001 is gauge of speed
         };
 
         //queue actually is just extended array
@@ -439,8 +439,8 @@
 
     Scrollissimo.lastProgress = 0;
 
-    Scrollissimo._catch = function(){
-        var scrollTop = getScrollTop(), //calculate current scroll
+    Scrollissimo._catch = function(customScrollTop){
+        var scrollTop = ( isNaN(customScrollTop) ? getScrollTop() : customScrollTop), //calculate current scroll
             progress = scrollTop / (docHeight - windowHeight); //calculate current scroll progress
 
         this._render(progress);
@@ -469,9 +469,9 @@
         return newQueue;
     }).bind(Scrollissimo);
 
-    Scrollissimo.knock = function(){
-        this._catch();
-        setTimeout(this._catch.bind(this), 100);
+    Scrollissimo.knock = function(customScrollTop){
+        this._catch(customScrollTop);
+        isNaN(customScrollTop) && setTimeout(this._catch.bind(this), 100);
     };
 
     //every time window has been resized
