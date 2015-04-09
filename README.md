@@ -1,5 +1,5 @@
 # Scrollissimo
-Javascript plugin for scroll-controlled animations
+Javascript plugin for smooth scroll-controlled animations
 
 ## Get started
 

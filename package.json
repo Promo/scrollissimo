@@ -1,17 +1,14 @@
 {
   "name": "Scrollissimo",
   "version": "0.0.1",
-  "description": "Plugin for smothing onscroll animations",
+  "description": "Javascript plugin for smooth scroll-controlled animations",
   "main": "scrollissimo.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Promo/Scrollissimo.git"
+    "url": "git@github.com:Promo/scrollissimo.git"
   },
   "keywords": [
-    "Scrollissimo",
+    "scrollissimo",
     "scrollorama",
     "scrollmagic",
     "animations"
@@ -19,9 +16,9 @@
   "author": "frux",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Promo/Scrollissimo/issues"
+    "url": "https://github.com/Promo/scrollissimo/issues"
   },
-  "homepage": "https://github.com/Promo/Scrollissimo",
+  "homepage": "https://github.com/Promo/scrollissimo",
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-rename": "^1.2.2",
