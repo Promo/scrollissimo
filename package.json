@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "description": "Javascript plugin for smooth scroll-controlled animations",
   "main": "scrollissimo.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git@github.com:Promo/scrollissimo.git"
