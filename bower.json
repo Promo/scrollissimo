@@ -24,13 +24,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "dependencies": {
-    "jquery": "1.11.2"
-  },
-  "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.1.0"
-  }
+  ]
 }
