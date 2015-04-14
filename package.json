@@ -1,6 +1,6 @@
 {
   "name": "Scrollissimo",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "Javascript plugin for smooth scroll-controlled animations",
   "main": "scrollissimo.js",
   "repository": {
