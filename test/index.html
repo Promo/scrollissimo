@@ -79,7 +79,7 @@
             assert.ok( !isNaN(Scrollissimo._toPercents('100%')) && Scrollissimo._toPercents('100%') === 1, '\'100%\'' );
         });
 
-        Scrollissimo._requestAnimationFrame(function(time){
+        window._rAF(function(time){
             QUnit.test( 'requestAnimationFrame', function( assert ) {
                 assert.ok( time > 0, 'OK' );
             });
