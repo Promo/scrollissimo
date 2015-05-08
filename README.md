@@ -66,7 +66,7 @@ PercentPixel parameters may be specified as:
 
 ## Changelog
  * v0.2.0:
-    * Supporting of relative start value
+    * Support of relative start values
  * v0.1.0:
     * jQuery now is required
     * ```maxSpeed``` parameter now is a multiplier (1 equals standard maximal speed and approximately equals 0.001 old value)
