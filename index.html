@@ -27,23 +27,13 @@
                 indicator = $('#indicator'),
                 header = $('#header');
 
-            Scrollissimo.add([
+            console.log(Scrollissimo.add([
                 {
                     target: header,
                     property: 'font-size',
                     from: 0,
                     to: 150,
                     suffix: 'px',
-                    start: '0',
-                    duration: '5%'
-                },
-                 {
-                    target: header,
-                    property: 'text-shadow',
-                    from: 0,
-                    to: 18,
-                    prefix: '0 0 ',
-                    suffix: 'px rgba(0,0,0,.35)',
                     start: '0',
                     duration: '5%'
                 },
@@ -54,7 +44,7 @@
                     to: 18,
                     prefix: '0 0 ',
                     suffix: 'px rgba(0,0,0,.5)',
-                    start: '0',
+                    start: '-5%',
                     duration: '5%'
                 },
                 {
@@ -63,7 +53,7 @@
                     from: 50,
                     to: 20,
                     suffix: '%',
-                    start: '0',
+                    start: '-5%',
                     duration: '10%'
                 },
                 {
@@ -72,7 +62,6 @@
                     from: 150,
                     to: 50,
                     suffix: 'px',
-                    start: '5%',
                     duration: '10%'
                 },
                 {
@@ -82,10 +71,10 @@
                     to: 0,
                     prefix: '0 0 ',
                     suffix: 'px rgba(0,0,0,.25)',
-                    start: '5%',
+                    start: '-10%',
                     duration: '10%'
                 }
-            ], 1);
+            ], .7));
 
             //create new queue with animation of scroll indicator
             Scrollissimo.add({
