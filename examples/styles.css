@@ -1,3 +1,109 @@
-.styles.css {
+html
+{
+    height: 8000px;
+}
+.b-page
+{
+    margin: 0;
+    padding: 0;
+}
+.screen
+{
+    position: fixed;
+    top: 0;
+    left: 0;
 
+    width: 100%;
+    height: 100%;
+}
+
+.queue
+{
+    position: fixed;
+
+    box-sizing: border-box;
+    height: 50px;
+
+    background: #ccc;
+}
+
+.queue:after
+{
+    font: 14px/1 Arial, Helvetica;
+
+    position: absolute;
+    top: 15px;
+    right: -105px;
+
+    display: inline-block;
+
+    width: 100px;
+}
+
+.queue__completion
+{
+    width: 0;
+    height: 50px;
+
+    background: #0000a7;
+}
+
+.queue1
+{
+    top: 25px;
+    left: 0;
+
+    width: 2%;
+}
+.queue1:after
+{
+    content: 'Queue 1';
+}
+
+.queue2
+{
+    top: 100px;
+    left: 7%;
+
+    width: 30%;
+}
+.queue2:after
+{
+    content: 'Queue 2';
+}
+
+.queue3
+{
+    top: 175px;
+    left: 35%;
+
+    width: 16%;
+}
+.queue3:after
+{
+    content: 'Queue 3';
+}
+
+.queue4
+{
+    top: 250px;
+    left: 50%;
+
+    width: 45%;
+}
+.queue4:after
+{
+    content: 'Queue 4';
+}
+
+.timeline-indicator
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 4px;
+    height: 100%;
+
+    background: red;
 }
