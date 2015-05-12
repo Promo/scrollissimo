@@ -56,7 +56,7 @@ Scrollissimo.add({
 });
 ```
 
-That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/1ff5Lv9x/2/).
+That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/1ff5Lv9x/5/).
 
 ##PercentPixel units
 PercentPixel units used to specify tween's parameters such as ```start```, ```duration``` and also custom ```scrollTop``` value in a ```.knock()``` method.
