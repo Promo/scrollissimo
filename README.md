@@ -57,12 +57,15 @@ Scrollissimo.add({
 ```
 
 That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/1ff5Lv9x/2/).
+
 ##PercentPixel units
 PercentPixel units used to specify tween's parameters such as ```start```, ```duration``` and also custom ```scrollTop``` value in a ```.knock()``` method.
 
 PercentPixel parameters may be specified as:
  * percentage of total page's height: ```'54%'```
  * pixel's quantity: ```'1000px'``` or ```'1000'``` or ```1000```
+
+***NB***: animation's ```start``` parameter you can also specify as a relative value by adding "-" or "+" before value. For example ```start: '-50px'``` means animation will start 50 pixels earlier than it should.
 
 ## Changelog
  * v0.2.0:
