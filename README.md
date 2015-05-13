@@ -1,12 +1,16 @@
 # Scrollissimo
 Javascript plugin for smooth scroll-controlled animations
 
+Scrollissimo can animate Greensock's tweens and timelines on user's scroll.
+
 ## Get started
 
-The first step you need is to include jQuery and Scrollissimo to your page:
+The first step you need is to include Greensock and Scrollissimo to your page:
 
 ```html
-    <script src="jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js"></script>
     <script src="scrollissimo.min.js"></script>
 ```
 
@@ -16,7 +20,7 @@ To support touch devices you also need to include touch adapter:
     <script src="scrollissimo.touch.min.js"></script>
 ```
 
-Then we will trigger Scrollissimo at each scroll event:
+Then we will trigger Scrollissimo on each scroll event:
 
 ```html
 <script>
@@ -36,38 +40,39 @@ Let we have a div called *Divy*:
 ```
 ```css
 #Divy{
+    position: fixed;
+    top: 0;
+    left: 0;
+    
     height: 50px;
     width: 50px;
+    
     background: red;
 }
 ```
 
-Now we will animate Divy's width. At the begining of page its width will be equal to 50px. And as we scroll its width will be grow up to 300px after we have scrolled for 10% of page's height.
+Now we will animate Divy's width. At the begining of page its width will be equal to 50px. And as we scroll its width will be grow up to 300px after we have scrolled for 500 pixels.
+The first let's create Grensock's tween.
 
 ```js
-Scrollissimo.add({
-    target: $('#Divy'),
-    property: 'width',
-    from: 50,
-    to: 300,
-    suffix: 'px',
-    start: '0',
-    duration: '10%'
-});
+var divyTween = TweenLite.to(document.getElementById('divy'), 500, { width: 300, paused: true });
 ```
 
-That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/1ff5Lv9x/5/).
+**NOTE**: Your tween must be paused. You can make it easily by specifing  ```paused: true``` or creating tween by constructor ```new TweenLite()```.
 
-##PercentPixel units
-PercentPixel units used to specify tween's parameters such as ```start```, ```duration``` and also custom ```scrollTop``` value in a ```.knock()``` method.
+Then we need to add this tween to Scrollissimo.
 
-PercentPixel parameters may be specified as:
- * percentage of total page's height: ```'54%'```
- * pixel's quantity: ```'1000px'``` or ```'1000'``` or ```1000```
+```js
+Scrollissimo.add(divyTween, 0);
+```
 
-***NB***: animation's ```start``` parameter you can also specify as a relative value by adding "-" or "+" before value. For example ```start: '-50px'``` means animation will start 50 pixels earlier than it should.
+The second argument is start scroll value in pixels.
+
+That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/7d9kxpe1/2/).
 
 ## Changelog
+ * v0.3.0:
+    * Now Scrollissimo is powered by [Greensock](http://greensock.com/). Animate your Greensock's tweens and timelines by scrolling. Enjoy of it's smoothness!
  * v0.2.0:
     * Support of relative start values
  * v0.1.0:
