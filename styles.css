@@ -1,9 +1,27 @@
+/* FONTS */
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Ubuntu'), url(fonts/ubuntu.woff2) format('woff2'), url(fonts/ubuntu.woff) format('woff');
+}
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Ubuntu Italic'), local('Ubuntu-Italic'), url(fonts/ubuntu_italic.woff2) format('woff2'), url(fonts/ubuntu_italic.woff) format('woff');
+}
+
+
+
 html
 {
     height: 8000px;
 }
 .b-page
 {
+    font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+
     margin: 0;
     padding: 0;
 }
@@ -16,8 +34,12 @@ html
     width: 100%;
     height: 20px;
 
+    -webkit-transform: scale3d(0,1,1);
+            transform: scale3d(0,1,1);
+
     opacity: .25;
     background: #000;
+
     will-change: scale;
 }
 .screen
@@ -30,17 +52,18 @@ html
     height: 100%;
 
     -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
 }
 
 .screen_num_1
 {
-    background: #00557a;
+    background: url(images/geometry.png) repeat top left;
 }
 
 .screen_num_1 .header
 {
-    font: 150px/1 Arial, Helvetica, sans-serif;
+    font-size: 150px;
+    line-height: 1;
 
     position: absolute;
     top: 50%;
@@ -48,9 +71,9 @@ html
     width: 100%;
     margin: 0;
 
-    -webkit-transform: scale3d(0,1,1) translate3d(0, 0, 0);
-            transform: scale3d(0,1,1) translate3d(0, 0, 0);
+    -webkit-transform: scale3d(0,0,1) translate3d(0, 0, 0);
+            transform: scale3d(0,0,1) translate3d(0, 0, 0);
     text-align: center;
 
-    color: #fff;
+    color: #ed993b;
 }
