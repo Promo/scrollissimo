@@ -12,35 +12,44 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body class="b-page">
-    <section id="screen1" class="screen screen_num_1">
-        <h1 id="header" class="screen__header header">Scrollissimo</h1>
-    </section>
-    <div class="indicator" id="indicator"></div>
+<section id="screen1" class="screen screen_num_1">
+    <h1 id="s1header" class="screen__header header">Scrollissimo</h1>
+    <span id="s1slogan" class="screen__slogan slogan ">Javascript plugin for smooth scroll-controlled animations</span>
+</section>
+<section id="screen2" class="screen screen_num_2">
+</section>
+<div class="indicator" id="indicator"></div>
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js"></script>
-    <script src="scrollissimo/lib/scrollissimo.js"></script>
-    <script>
-        window.addEventListener('load', function(){
-            var screen1 = document.getElementById('screen1'),
-                indicator = document.getElementById('indicator'),
-                header = document.getElementById('header'),
-                textTimeline = new TimelineLite( {paused: true} );
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+<script src="scrollissimo/lib/scrollissimo.js"></script>
+<script>
+    window.addEventListener('load', function(){
+        var screen1 = document.getElementById('screen1'),
+            indicator = document.getElementById('indicator'),
+            header = document.getElementById('s1header'),
+            slogan = document.getElementById('s1slogan'),
+            firstTimeline = new TimelineMax({ paused: true });
 
-            textTimeline.to(header, 1000, { scale: 1, top: '35%' });
-            textTimeline.to(header, 1000, { scale: .33, top: '20%' });
-            textTimeline.to(screen1, 2000, { top: '-100%', ease:Linear.easeNone }, '+=1000');
+        //TODO second timeline
 
+        TweenMax.set(header, { scale: 0, x: '-50%', top: '50%' });
+        TweenMax.set(slogan, { x: '-100%', left: 0 });
 
-            Scrollissimo.add(textTimeline, 0, 5);
+        firstTimeline.to(header, 1000, { scale: 1, x: '-50%', top: '35%' });
+        firstTimeline.to(header, 1000, { scale: .5, x: '-50%', top: '20%' });
+        firstTimeline.to(slogan, 1000, { left: '50%', x: '-50%' });
 
-            Scrollissimo.add(new TweenLite(indicator, 8000, { scale: 1, ease:Linear.easeNone, paused: true }), 0);
+        firstTimeline.to(screen1, 2000, { y: '-100%', ease: Linear.easeNone }, '+=1000');
+        firstTimeline.to(header, 2000, { scale: .25, x: '-30%', top: '100%', left: '0' }, '-=2000');
 
-            window.addEventListener('scroll', function(){
-                Scrollissimo.knock();
-            });
+        Scrollissimo.add(firstTimeline, 0, 5);
+
+        Scrollissimo.add(new TweenMax(indicator, 8000, { scale: 1, ease: Linear.easeNone, paused: true }), 0);
+
+        window.addEventListener('scroll', function(){
+            Scrollissimo.knock();
         });
-    </script>
+    });
+</script>
 </body>
 </html>
