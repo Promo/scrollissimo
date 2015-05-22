@@ -5,22 +5,33 @@ Scrollissimo can animate Greensock's tweens and timelines on user's scroll.
 
 ## Get started
 
-The first step you need is to include Greensock and Scrollissimo to your page:
+The first step you need is to include Greensock:
 
 ```html
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js"></script>
-    <script src="scrollissimo.min.js"></script>
+```
+
+... or just:
+
+```html
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+```
+
+... and Scrollissimo of course:
+
+```html
+    <script src="scrollissimo/dist/scrollissimo.min.js"></script>
 ```
 
 To support touch devices you also need to include touch adapter:
 
 ```html
-    <script src="scrollissimo.touch.min.js"></script>
+    <script src="scrollissimo/dist/scrollissimo.touch.min.js"></script>
 ```
 
-Then we will trigger Scrollissimo on each scroll event:
+Then we must trigger Scrollissimo on each scroll event:
 
 ```html
 <script>

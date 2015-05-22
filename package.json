@@ -19,10 +19,15 @@
     "url": "https://github.com/Promo/scrollissimo/issues"
   },
   "homepage": "https://github.com/Promo/scrollissimo",
+  "scripts": {
+    "test": "mocha"
+  },
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.1.0",
-    "qunitjs": "^1.18.0"
+    "qunitjs": "^1.18.0",
+    "should": "^6.0.3",
+    "mocha": "^2.2.5"
   }
 }
