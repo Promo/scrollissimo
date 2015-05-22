@@ -1,6 +1,8 @@
 # Scrollissimo
 Javascript plugin for smooth scroll-controlled animations
 
+[![Build Status][travis-image]][travis-url]
+
 Scrollissimo can animate Greensock's tweens and timelines on user's scroll.
 
 ## Get started
@@ -90,3 +92,6 @@ That is all you need to do to make a simple animation. Result you may see [here]
     * jQuery now is required
     * ```maxSpeed``` parameter now is a multiplier (1 equals standard maximal speed and approximately equals 0.001 old value)
     * ```Scrollissimo.knock``` now takes optional parameter. It forces scrollTop value for Scrollissimo.
+    
+[travis-url]: http://travis-ci.org/Promo/scrollissimo
+[travis-image]: http://img.shields.io/travis/Promo/scrollissimo.svg?branch=master&style=flat
