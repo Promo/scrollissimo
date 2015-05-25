@@ -30,29 +30,37 @@
                 sharpDivy = sharpDemo.querySelector('.divy'),
                 smoothDivy = smoothDemo.querySelector('.divy');
 
-            TweenMax.defaultEase = Linear.easeNone;
+            TweenLite.defaultEase = Linear.easeNone;
 
-            sharpTimeline.to(sharpDivy, 1000, { top: '15%', left: '25%', x: '-50%' });
-            sharpTimeline.to(sharpDivy, 1000, { scale: 2, opacity:.6 });
-            sharpTimeline.to(sharpDivy, 500, { rotation: 45, top: '30%' });
-            sharpTimeline.to(sharpDivy, 1000, { opacity: 1, borderRadius: '50%', top: '60%' });
-            sharpTimeline.to(sharpDivy, 500, { rotation: 225 });
-            sharpTimeline.to(sharpDivy, 1000, { top: '15%', left: '45%' });
-            sharpTimeline.to(sharpDivy, 1000, { top: '100%', left: '25%' });
+            sharpTimeline.to(sharpDivy, 1000, { top: '15%', left: '35%', x: '-50%' });
+            sharpTimeline.to(sharpDivy, 1000, { top: '30%', left: '5%' });
+            sharpTimeline.to(sharpDivy, 1000, { width: 120, height: 120 }, '-=1000');
+            sharpTimeline.to(sharpDivy, 1000, { top: '45%', left: '35%' });
+            sharpTimeline.to(sharpDivy, 1000, { opacity: .3 }, '-=1000');
+            sharpTimeline.to(sharpDivy, 1000, { top: '60%', left: '5%' });
+            sharpTimeline.to(sharpDivy, 1000, { opacity: 1, rotation: 45 }, '-=1000');
+            sharpTimeline.to(sharpDivy, 1000, { top: '75%', left: '35%' });
+            sharpTimeline.to(sharpDivy, 1000, { borderRadius: '50%' }, '-=1000');
+            sharpTimeline.to(sharpDivy, 1000, { top: '90%', left: '5%' });
             Scrollissimo.add(sharpTimeline, 0);
 
-            smoothTimeline.to(smoothDivy, 1000, { top: '15%', left: '75%', x: '-50%' });
-            smoothTimeline.to(smoothDivy, 1000, { scale: 2, opacity:.6 });
-            smoothTimeline.to(smoothDivy, 500, { rotation: 45, top: '30%' });
-            smoothTimeline.to(smoothDivy, 1000, { opacity: 1, borderRadius: '50%', top: '60%' });
-            smoothTimeline.to(smoothDivy, 500, { rotation: 225 });
-            smoothTimeline.to(smoothDivy, 1000, { top: '15%', left: '100%' });
-            smoothTimeline.to(smoothDivy, 1000, { top: '100%', left: '75%' });
+            smoothTimeline.to(smoothDivy, 1000, { top: '15%', left: '90%', x: '-50%' });
+            smoothTimeline.to(smoothDivy, 1000, { top: '30%', left: '60%' });
+            smoothTimeline.to(smoothDivy, 1000, { width: 120, height: 120 }, '-=1000');
+            smoothTimeline.to(smoothDivy, 1000, { top: '45%', left: '90%' });
+            smoothTimeline.to(smoothDivy, 1000, { opacity: .3 }, '-=1000');
+            smoothTimeline.to(smoothDivy, 1000, { top: '60%', left: '60%' });
+            smoothTimeline.to(smoothDivy, 1000, { opacity: 1, rotation: 45 }, '-=1000');
+            smoothTimeline.to(smoothDivy, 1000, { top: '75%', left: '90%' });
+            smoothTimeline.to(smoothDivy, 1000, { borderRadius: '50%' }, '-=1000');
+            smoothTimeline.to(smoothDivy, 1000, { top: '90%', left: '60%' });
             Scrollissimo.add(smoothTimeline, 0, 4);
 
             window.addEventListener('scroll', function(){
                 Scrollissimo.knock();
             });
+
+            console.log(sharpTimeline, smoothTimeline);
         });
 
     </script>
