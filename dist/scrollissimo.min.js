@@ -1,7 +1,7 @@
 /**
  * Scrollissimo
  * Javascript plugin for smooth scroll-controlled animations
- * @version 0.3.0
+ * @version 0.3.1
  * @author frux <qdinov@yandex.ru>
  * @url https://github.com/Promo/scrollissimo
  */
