@@ -29,13 +29,13 @@ describe('Methods', function(){
         document = document || {
             body: {
                 scrollHeight: docHeight,
-                offsetHeight: docHeight,
-                clientHeight: docHeight
+                offsetHeight: 0.1 * docHeight,
+                clientHeight: 0.3 * docHeight
             },
             documentElement: {
-                scrollHeight: docHeight,
-                offsetHeight: docHeight,
-                clientHeight: docHeight
+                scrollHeight: 0.4 * docHeight,
+                offsetHeight: 0.5 * docHeight,
+                clientHeight: 0.6 * docHeight
             }
         };
 
@@ -47,16 +47,59 @@ describe('Methods', function(){
     Scrollissimo = require('../lib/scrollissimo');
 
     window.addEventListener('load', function(){
-        it('Initialization', function(done){
-            should.exist(Scrollissimo);
-            done();
-        });
-
-        it('_toPercents test', function(done){
+        it('_toPercents tests', function(done){
             Scrollissimo._toPercents('300px').should.equal(.15, 'Converting px to percents');
             Scrollissimo._toPercents('300').should.equal(.15, 'Converting String number to percents');
             Scrollissimo._toPercents(300).should.equal(.15, 'Converting Number to percents');
             Scrollissimo._toPercents('15%').should.equal(.15, 'Converting % to percents');
+            done();
+        });
+
+        it('_getIntersection tests', function(done){
+            var intersection;
+
+            intersection = Scrollissimo._getIntersection(0, 10, 2, 8);
+            intersection.should.have.property('from');
+            intersection.should.have.property('to');
+            intersection.from.should.equal(2);
+            intersection.to.should.equal(8);
+
+            intersection = Scrollissimo._getIntersection(2, 8, 0, 10);
+            intersection.should.have.property('from');
+            intersection.should.have.property('to');
+            intersection.from.should.equal(2);
+            intersection.to.should.equal(8);
+
+            intersection = Scrollissimo._getIntersection(0, 7, 2, 9);
+            intersection.should.have.property('from');
+            intersection.should.have.property('to');
+            intersection.from.should.equal(2);
+            intersection.to.should.equal(7);
+
+            intersection = Scrollissimo._getIntersection(2, 9, 0, 7);
+            intersection.should.have.property('from');
+            intersection.should.have.property('to');
+            intersection.from.should.equal(2);
+            intersection.to.should.equal(7);
+
+            intersection = Scrollissimo._getIntersection(1, 5, 5, 10);
+            intersection.should.have.property('from');
+            intersection.should.have.property('to');
+            intersection.from.should.equal(5);
+            intersection.to.should.equal(5);
+
+            intersection = Scrollissimo._getIntersection(0, 0, 0, 0);
+            intersection.should.have.property('from');
+            intersection.should.have.property('to');
+            intersection.from.should.equal(0);
+            intersection.to.should.equal(0);
+
+            intersection = Scrollissimo._getIntersection(0, 4, 5, 9);
+            should.not.exists(intersection);
+
+            intersection = Scrollissimo._getIntersection(5, 9, 0, 4);
+            should.not.exists(intersection);
+
             done();
         });
     });
