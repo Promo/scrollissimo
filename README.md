@@ -84,6 +84,8 @@ The second argument is start scroll value in pixels.
 That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/7d9kxpe1/2/).
 
 ## Changelog
+ * v0.3.2:
+    * Hotfix
  * v0.3.1:
     * CommonJS support
  * v0.3.0:
