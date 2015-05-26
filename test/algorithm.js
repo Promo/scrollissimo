@@ -64,7 +64,6 @@ describe('Algorithm', function(){
     global.window = window;
 
     Scrollissimo = require('../lib/scrollissimo');
-    Scrollissimo = window.Scrollissimo;
 
     window.addEventListener('load', function(){
         it('Initialization', function(done){
