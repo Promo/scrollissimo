@@ -84,7 +84,7 @@ The second argument is start scroll value in pixels.
 That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/7d9kxpe1/2/).
 
 ## Changelog
- * v0.3.32:
+ * v0.3.3:
      * Autopausing of tweens and timelines. Now you don't have to pause it manually.
  * v0.3.2:
     * Hotfix
