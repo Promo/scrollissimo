@@ -15,6 +15,9 @@ describe('Algorithm', function(){
             },
             duration: function(){
                 return docHeight;
+            },
+            pause: function(){
+                return this;
             }
         },
         testResult = [],
