@@ -1,0 +1,62 @@
+html
+{
+    height: 6700px;
+}
+.b-page
+{
+    font: 14px Helvetica, Arial, sans-serif;
+
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.comparing
+{
+    width: 100%;
+    height: 100%;
+
+    background-color: #fff;
+}
+.demo
+{
+    position: fixed;
+
+    width: 100%;
+    height: 399px;
+
+    background: url(clouds.jpg) repeat 0 0 #58beff;
+}
+.demo_smooth_no
+{
+    top: 0;
+}
+.demo_smooth_yes
+{
+    top: 401px;
+}
+.demo__title
+{
+    font-size: 24px;
+    font-weight: normal;
+
+    display: inline-block;
+
+    margin: 1em 0 0 40px;
+    padding: 0;
+
+    text-shadow: 0 0 10px rgba(0, 0, 0, .8);
+
+    color: #fff;
+}
+.paperfly
+{
+    position: absolute;
+    top: 50%;
+
+    width: 103px;
+    height: 46px;
+
+    transform: translate3d(-50%, -50%, 0);
+
+    background: url(paperfly.png) no-repeat top left;
+}
