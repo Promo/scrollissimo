@@ -82,22 +82,6 @@ Scrollissimo.add(divyTween, 0);
 The second argument is start scroll value in pixels.
 
 That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/7d9kxpe1/2/).
-
-## Changelog
- * v0.3.3:
-     * Autopausing of tweens and timelines. Now you don't have to pause it manually.
- * v0.3.2:
-    * Hotfix
- * v0.3.1:
-    * CommonJS support
- * v0.3.0:
-    * Now Scrollissimo is powered by [Greensock](http://greensock.com/). Animate your Greensock's tweens and timelines by scrolling. Enjoy of it's smoothness!
- * v0.2.0:
-    * Support of relative start values
- * v0.1.0:
-    * jQuery now is required
-    * ```maxSpeed``` parameter now is a multiplier (1 equals standard maximal speed and approximately equals 0.001 old value)
-    * ```Scrollissimo.knock``` now takes optional parameter. It forces scrollTop value for Scrollissimo.
     
 [travis-url]: http://travis-ci.org/Promo/scrollissimo
 [travis-image]: http://img.shields.io/travis/Promo/scrollissimo.svg?branch=master&style=flat
