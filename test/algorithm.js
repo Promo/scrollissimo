@@ -85,10 +85,9 @@ describe('Algorithm', function(){
                         Scrollissimo.knock(scrollTop);
                     }else{
                         clearInterval(timer);
-                        testResult.should.containEql(data.result[0]);
                         testResult.forEach(function(resultValue, i){
-                            if(i > 0 && i < (testResult.length - 1)){
-                                (resultValue - testResult[i - 1]).should.be.below(data.maxSpeed + 1, 'Check if progress offset is below max speed');
+                            if(i > 1 && i < (testResult.length - 1)){
+                                (resultValue - testResult[i - 1]).should.be.below(data.maxSpeed + 1);
                             }else{
                                 should.type('number');
                             }
