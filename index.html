@@ -10,15 +10,56 @@
     <![endif]-->
 
     <link href="styles.css" rel="stylesheet">
+    <link href="github-fork-ribbon-css/gh-fork-ribbon.css" rel="stylesheet">
 </head>
 <body class="b-page">
 <section id="screen1" class="screen screen_num_1">
-    <h1 id="s1header" class="screen__header header">Scrollissimo</h1>
+    <h1 id="s1header" class="screen__header header header_lvl_1">Scrollissimo</h1>
     <span id="s1slogan" class="screen__slogan slogan ">Javascript plugin for smooth scroll-controlled animations</span>
-</section>
-<section id="screen2" class="screen screen_num_2">
+
+    <article class="screen__step screen__step_color_orange screen__step_download">
+        <h2 class="screen__header header header_lvl_2">Download</h2>
+        <span class="label">from repository:</span>
+        <pre class="code code_lang_text"><a href="https://github.com/Promo/scrollissimo" target="_blank">https://github.com/Promo/scrollissimo</a></pre>
+        <span class="label">... or via bower:</span>
+        <pre class="code code_lang_bash">bower install scrollissimo</pre>
+    </article>
+
+    <article class="screen__step screen__step_color_white screen__step_connect">
+        <h2 class="screen__header header header_lvl_2">Connect</h2>
+        <span class="label">Greensock:</span>
+        <pre class="code code_lang_html"><!--
+ -->&lt;script src="<a href="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js" _target="blank">http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js</a>"&gt;&lt;/script&gt;
+&lt;script src="<a href="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js" _target="blank">http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js</a>"&gt;&lt;/script&gt;
+&lt;script src="<a href="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js" _target="blank">http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js</a>"&gt;&lt;/script&gt;<!--
+        --></pre>
+        <span class="label">Scrollissimo:</span>
+        <pre class="code code_lang_html"><!--
+ -->&lt;script src="dist/scrollissimo.min.js"&gt;&lt;/script&gt;<!--
+        --></pre>
+    </article>
+
+    <article class="screen__step screen__step_color_orange screen__step_use">
+        <h2 class="screen__header header header_lvl_2">Use</h2>
+        <span class="label">Trigger Scrollissimo on each scroll:</span>
+        <pre class="code code_lang_js"><!--
+ -->$(window).scroll(function(){
+    Scrollissimo.knock();
+});<!--
+        --></pre>
+        <span class="label">Add Greensock Tween (Timeline) to Scrollissimo:</span>
+        <pre class="code code_lang_js"><!--
+ -->var myTween = new TweenLite($('#myElem'), 1000, { top: 100, left: 350, rotation: '270deg', opacity: .7, scale: 2 });
+Scrollissimo.add(myTween, 0, 6);<!--
+        --></pre>
+    </article>
 </section>
 <div class="indicator" id="indicator"></div>
+
+<!-- github-fork-ribbon -->
+<a class="github-ribbon" href="https://github.com/promo/scrollissimo">
+    <img src="images/git2x.png" width="150">
+</a>
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
 <script src="scrollissimo/lib/scrollissimo.js"></script>
@@ -28,23 +69,27 @@
             indicator = document.getElementById('indicator'),
             header = document.getElementById('s1header'),
             slogan = document.getElementById('s1slogan'),
+            steps = document.querySelectorAll('.screen__step'),
+            step1 = document.querySelector('.screen__step_download'),
+            step2 = document.querySelector('.screen__step_connect'),
+            step3 = document.querySelector('.screen__step_use'),
             firstTimeline = new TimelineMax({ paused: true });
 
-        //TODO second timeline
+        TweenLite.defaultEase = Linear.easeNone;
 
-        TweenMax.set(header, { scale: 0, x: '-50%', top: '50%' });
-        TweenMax.set(slogan, { x: '-100%', left: 0 });
+        firstTimeline.to(header, 1000, { scale: 1, top: '35%' });
+        firstTimeline.to(header, 1000, { scale: .5, top: '20%' });
+        firstTimeline.to(slogan, 1000, { left: 0 });
+        firstTimeline.to(header, 1000, { top: '-2%' });
+        firstTimeline.to(slogan, 1000, { top: '-2%' }, '-=1000');
+        firstTimeline.to(step1, 1000, { rotationX: 0, visibility: 'visible' });
+        firstTimeline.to(step2, 1000, { rotationX: 0, visibility: 'visible' });
+        firstTimeline.to(step3, 1000, { rotationX: 0, visibility: 'visible' });
+        firstTimeline.to(screen1, 1000, { top: '-30%' }, '+=1500');
 
-        firstTimeline.to(header, 1000, { scale: 1, x: '-50%', top: '35%' });
-        firstTimeline.to(header, 1000, { scale: .5, x: '-50%', top: '20%' });
-        firstTimeline.to(slogan, 1000, { left: '50%', x: '-50%' });
+        Scrollissimo.add(firstTimeline, 0, 7);
 
-        firstTimeline.to(screen1, 2000, { y: '-100%', ease: Linear.easeNone }, '+=1000');
-        firstTimeline.to(header, 2000, { scale: .25, x: '-30%', top: '100%', left: '0' }, '-=2000');
-
-        Scrollissimo.add(firstTimeline, 0, 5);
-
-        Scrollissimo.add(new TweenMax(indicator, 8000, { scale: 1, ease: Linear.easeNone, paused: true }), 0);
+        Scrollissimo.add(new TweenMax(indicator, 9500, { scale: 1, ease: Linear.easeNone, paused: true }), 0);
 
         window.addEventListener('scroll', function(){
             Scrollissimo.knock();

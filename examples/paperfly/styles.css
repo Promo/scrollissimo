@@ -60,3 +60,11 @@ html
 
     background: url(paperfly.png) no-repeat top left;
 }
+
+.github-ribbon
+{
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+}

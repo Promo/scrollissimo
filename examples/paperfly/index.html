@@ -17,6 +17,10 @@
         </div>
     </section>
 
+    <!-- github-fork-ribbon -->
+    <a class="github-ribbon" href="https://github.com/promo/scrollissimo">
+        <img src="../../images/git2x.png" width="150">
+    </a>
 
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <script src="../../scrollissimo/lib/scrollissimo.touch.js"></script>
@@ -55,8 +59,8 @@
             smoothTimeline.to(smoothFly, 1500, { top: '70%', left: '75%' });
             smoothTimeline.to(smoothFly, 1500, { top: '50%', left: '100%' });
 
-            Scrollissimo.add(smoothTimeline, 0, 14);
-            Scrollissimo.add(TweenMax.to(smoothDemo, 6700, { backgroundPosition: '-703px 0' }), 0, 14);
+            Scrollissimo.add(smoothTimeline, 0, 12);
+            Scrollissimo.add(TweenMax.to(smoothDemo, 6700, { backgroundPosition: '-703px 0' }), 0, 11);
 
             window.addEventListener('scroll', function(){
                 Scrollissimo.knock();
