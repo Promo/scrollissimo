@@ -57,6 +57,7 @@ html
     height: 46px;
 
     transform: translate3d(-50%, -50%, 0);
+    -webkit-transform: translate3d(-50%, -50%, 0);
 
     background: url(paperfly.png) no-repeat top left;
 }
