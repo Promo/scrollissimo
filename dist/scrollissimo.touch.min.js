@@ -1,6 +1,5 @@
 /**
  * Touch adapter for Scrollissimo
- * @version 0.3.3
  * @author frux <qdinov@yandex.ru>
  * @url https://github.com/Promo/scrollissimo
  */
