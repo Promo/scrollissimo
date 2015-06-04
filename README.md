@@ -77,11 +77,11 @@ Let we have a div called *Divy*:
 }
 ```
 
-Now we will animate Divy's width. At the begining of page its width will be equal to 50px. And as we scroll its width will be grow up to 300px after we have scrolled for 500 pixels.
+Now we will animate Divy's width. At the begining of page its width will be equal to 50px. And as we scroll its width will be grow up to 300px after we have scrolled for 1000 pixels.
 The first let's create Grensock's tween.
 
 ```js
-var divyTween = TweenLite.to(document.getElementById('divy'), 500, { width: 300 });
+var divyTween = TweenLite.to(document.getElementById('divy'), 1000, { width: 300 });
 ```
 
 Then we need to add this tween to Scrollissimo.
@@ -93,7 +93,7 @@ Scrollissimo.add(divyTween, 0, 6);
 The second argument is start scroll value in pixels.
 The third argument is a maximal speed of this animation. 1 approximately equal to 6% of tween's length per second. You must find your own value for each animation.
 
-That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/e5udtvaL/1/).
+That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/e5udtvaL/3/).
 
 Animating timelines is similar to tween`s animating.
     
