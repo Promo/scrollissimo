@@ -1,4 +1,4 @@
-![Scrollissimo](https://habrastorage.org/files/d69/67b/ba3/d6967bba3fae4dbe98842b20b2e18a9c.png)
+![Scrollissimo](https://habrastorage.org/files/997/93c/cec/99793ccec1464bb594f44f569396f184.png)
 
 Javascript plugin for smooth scroll-controlled animations
 
