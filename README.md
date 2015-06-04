@@ -1,4 +1,5 @@
-# Scrollissimo
+![Scrollissimo](https://habrastorage.org/files/d69/67b/ba3/d6967bba3fae4dbe98842b20b2e18a9c.png)
+
 Javascript plugin for smooth scroll-controlled animations
 
 [![Build Status][travis-image]][travis-url]
