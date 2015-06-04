@@ -3,10 +3,21 @@ Javascript plugin for smooth scroll-controlled animations
 
 [![Build Status][travis-image]][travis-url]
 
-Scrollissimo can animate Greensock's tweens and timelines on user's scroll.
+Scrollissimo animates Greensock's tweens and timelines on user's scroll.
+
+Comparing Scrollissimo and another default plugins [here](http://promo.github.io/scrollissimo/examples/paperfly). 
 
 ## Get started
 
+### Download
+
+Scrollissimo is available for downloading from repository. Also bower users can install Scrollissimo by command:
+
+```bash
+bower install scrollissimo
+```
+
+### Connect
 The first step you need is to include Greensock:
 
 ```html
@@ -33,7 +44,7 @@ To support touch devices you also need to include touch adapter:
     <script src="scrollissimo/dist/scrollissimo.touch.min.js"></script>
 ```
 
-Then we must trigger Scrollissimo on each scroll event:
+Next we will trigger Scrollissimo on each scroll event:
 
 ```html
 <script>
@@ -44,6 +55,8 @@ Then we must trigger Scrollissimo on each scroll event:
     });
 </script>
 ```
+
+**NOTE:** for touch devices support you must also attach scrollissimo.touch.min.js.
 
 ### Now lets animate something!
 Let we have a div called *Divy*:
@@ -68,20 +81,21 @@ Now we will animate Divy's width. At the begining of page its width will be equa
 The first let's create Grensock's tween.
 
 ```js
-var divyTween = TweenLite.to(document.getElementById('divy'), 500, { width: 300, paused: true });
+var divyTween = TweenLite.to(document.getElementById('divy'), 500, { width: 300 });
 ```
-
-**NOTE**: Your tween must be paused. You can make it easily by specifing  ```paused: true``` or creating tween by constructor ```new TweenLite()```.
 
 Then we need to add this tween to Scrollissimo.
 
 ```js
-Scrollissimo.add(divyTween, 0);
+Scrollissimo.add(divyTween, 0, 6);
 ```
 
 The second argument is start scroll value in pixels.
+The third argument is a maximal speed of this animation. 1 approximately equal to 6% of tween's length per second. You must find your own value for each animation.
 
 That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/7d9kxpe1/2/).
+
+Animating timelines is similar to tween`s animating.
     
 [travis-url]: http://travis-ci.org/Promo/scrollissimo
 [travis-image]: http://img.shields.io/travis/Promo/scrollissimo.svg?branch=master&style=flat
