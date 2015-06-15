@@ -36,7 +36,8 @@ describe('Algorithm', function(){
                     handler.call(this);
                 });
             },
-            innerHeight: 926
+            innerHeight: 926,
+            pageYOffset: 0
         },
 
         document = document || {
