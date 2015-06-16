@@ -3,8 +3,6 @@
 Javascript plugin for smooth scroll-controlled animations
 
 
-[![GitHub release](https://img.shields.io/github/release/promo/scrollissimo.svg?style=flat-square)]()
-
 [![Build Status][travis-image]][travis-url]
 
 Scrollissimo animates Greensock's tweens and timelines on user's scroll.
