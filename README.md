@@ -98,7 +98,7 @@ The second argument is start scroll value in pixels.
 The third argument is a maximal speed of this animation. 1 approximately equal to 6% of tween's length per second. You must find your own value for each animation.
 
 ```js
-Scrollissimo.add(<Tween|Timeline>, <startPixels>, <MaxSpeed>);
+Scrollissimo.add(<Tween|Timeline>, <StartPixels>, <MaxSpeed>);
 ```
 
 That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/e5udtvaL/3/).
