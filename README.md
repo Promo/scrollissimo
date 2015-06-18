@@ -86,7 +86,7 @@ The first let's create Grensock's tween.
 var divyTween = TweenLite.to(document.getElementById('divy'), 1000, { width: 300 });
 ```
 
-**NOTE:** As you see it\`s usual Greensock\`s Tween except of longiness of animation must be specified in pixels not in seconds.
+**NOTE:** As you see it\`s usual Greensock\`s Tween except of duration of animation must be specified in pixels not in seconds.
 
 Then we need to add this tween to Scrollissimo.
 
