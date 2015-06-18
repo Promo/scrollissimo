@@ -82,23 +82,25 @@ Let we have a div called *Divy*:
 Now we will animate Divy's width. At the begining of page its width will be equal to 50px. And as we scroll its width will be grow up to 300px after we have scrolled for 1000 pixels.
 The first let's create Grensock's tween.
 
+**```TweenLite.to(element:object, durationInPixels: number, params: object);```**
+
+more in [Greensock`s documentation](http://greensock.com/docs/#/HTML5/GSAP/TweenMax/to/)
+
 ```js
 var divyTween = TweenLite.to(document.getElementById('divy'), 1000, { width: 300 });
 ```
 
-**NOTE:** As you see it\`s usual Greensock\`s Tween except of duration of animation must be specified in pixels not in seconds.
+**NOTE:** As you see it\`s usual Greensock\`s Tween except of duration of animation ***must be specified in pixels not in seconds.
 
 Then we need to add this tween to Scrollissimo.
 
-```js
-Scrollissimo.add(divyTween, 0, 6);
-```
+**```Scrollissimo.add(<Tween|Timeline>, <StartPixels>, <MaxSpeed>);```**
 
 The second argument is start scroll value in pixels.
 The third argument is a maximal speed of this animation. 1 approximately equal to 6% of tween's length per second. You must find your own value for each animation.
 
 ```js
-Scrollissimo.add(<Tween|Timeline>, <StartPixels>, <MaxSpeed>);
+Scrollissimo.add(divyTween, 0, 6);
 ```
 
 That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/e5udtvaL/3/).
