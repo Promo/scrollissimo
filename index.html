@@ -50,7 +50,7 @@
         <span class="label">Add Greensock Tween (Timeline) to Scrollissimo:</span>
         <pre class="code code_lang_js"><!--
  -->var myTween = new TweenLite($('#myElem'), 1000, { top: 100, left: 350, rotation: '270deg', opacity: .7, scale: 2 });
-Scrollissimo.add(myTween, 0, 6);<!--
+Scrollissimo.add(myTween, 0, 25);<!--
         --></pre>
     </article>
 </section>
@@ -87,7 +87,7 @@ Scrollissimo.add(myTween, 0, 6);<!--
         firstTimeline.to(step3, 1000, { rotationX: 0, visibility: 'visible' });
         firstTimeline.to(screen1, 1000, { top: '-30%' }, '+=1500');
 
-        Scrollissimo.add(firstTimeline, 0, 7);
+        Scrollissimo.add(firstTimeline, 0, 60);
 
         Scrollissimo.add(new TweenMax(indicator, 9500, { scale: 1, ease: Linear.easeNone, paused: true }), 0);
 
