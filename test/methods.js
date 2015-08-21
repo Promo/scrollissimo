@@ -47,14 +47,6 @@ describe('Methods', function(){
     Scrollissimo = require('../lib/scrollissimo');
 
     window.addEventListener('load', function(){
-        it('_toPercents tests', function(done){
-            Scrollissimo._test._toPercents('300px').should.equal(.15, 'Converting px to percents');
-            Scrollissimo._test._toPercents('300').should.equal(.15, 'Converting String number to percents');
-            Scrollissimo._test._toPercents(300).should.equal(.15, 'Converting Number to percents');
-            Scrollissimo._test._toPercents('15%').should.equal(.15, 'Converting % to percents');
-            done();
-        });
-
         it('_getIntersection tests', function(done){
             var intersection;
 
