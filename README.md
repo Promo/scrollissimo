@@ -7,7 +7,7 @@ Javascript plugin for smooth scroll-controlled animations
 
 Scrollissimo animates Greensock's tweens and timelines on user's scroll.
 
-Comparing Scrollissimo and another default plugins [here](http://promo.github.io/scrollissimo/examples/paperfly). 
+Comparing Scrollissimo and another usual plugins [here](http://promo.github.io/scrollissimo/examples/paperfly). 
 
 ## Get started
 
@@ -97,13 +97,13 @@ Then we need to add this tween to Scrollissimo.
 **```Scrollissimo.add(<Tween|Timeline>, <StartPixels>, <MaxSpeed>);```**
 
 The second argument is start scroll value in pixels.
-The third argument is a maximal speed of this animation. 1 approximately equal to 6% of tween's length per second. You must find your own value for each animation.
+The third argument is a maximal value of changing scrollTop.
 
 ```js
-Scrollissimo.add(divyTween, 0, 6);
+Scrollissimo.add(divyTween, 0, 25);
 ```
 
-That is all you need to do to make a simple animation. Result you may see [here](https://jsfiddle.net/e5udtvaL/3/).
+That is all you need to do to make a simple animation.
 
 Animating timelines is similar to tween`s animating.
     
