@@ -10,8 +10,8 @@ describe('Algorithm', function(){
 
         //Greensock mock
         testTimeline = {
-            seek: function(progress){
-                testResult.push(progress);
+            progress: function(progress){
+                return this;
             },
             duration: function(){
                 return docHeight;
@@ -68,6 +68,10 @@ describe('Algorithm', function(){
     global.window = window;
 
     Scrollissimo = require('../lib/scrollissimo');
+
+    Scrollissimo._test._setRenderFunc(function(scrollTop){
+        testResult.push(scrollTop);
+    });
 
     window.addEventListener('load', function(){
         it('Initialization', function(done){
