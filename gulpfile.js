@@ -3,7 +3,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
 gulp.task('compress', function() {
-    gulp.src('lib/*.js')
+    gulp.src('lib/scrollissimo.js')
         .pipe(uglify())
         .pipe(rename({
             extname: '.min.js'
