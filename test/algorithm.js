@@ -13,12 +13,15 @@ describe('Algorithm', function(){
             progress: function(progress){
                 return this;
             },
+
             duration: function(){
                 return docHeight;
             },
+
             pause: function(){
                 return this;
             },
+
             timeScale: function(){
                 return 1;
             }
@@ -26,7 +29,7 @@ describe('Algorithm', function(){
         testResult = [],
 
         window = window || {
-            callbacks : {
+            callbacks: {
                 load: []
             },
             addEventListener: function(eventName, handler){
@@ -34,11 +37,13 @@ describe('Algorithm', function(){
                     this.callbacks[eventName].push(handler);
                 }
             },
+
             load: function(){
-                this.callbacks['load'].forEach(function(handler){
+                this.callbacks.load.forEach(function(handler){
                     handler.call(this);
                 });
             },
+
             innerHeight: 926,
             pageYOffset: 0
         },
@@ -67,6 +72,7 @@ describe('Algorithm', function(){
 
     // document mock
     global.document = document;
+
     // window mock
     global.window = window;
 
@@ -100,6 +106,7 @@ describe('Algorithm', function(){
                                 should.type('number');
                             }
                         });
+
                         done();
                     }
                 }, 100);

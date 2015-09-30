@@ -10,7 +10,7 @@ describe('Methods', function(){
 
     //Greensock mock
         window = window || {
-            callbacks : {
+            callbacks: {
                 load: []
             },
             addEventListener: function(eventName, handler){
@@ -18,11 +18,13 @@ describe('Methods', function(){
                     this.callbacks[eventName].push(handler);
                 }
             },
+
             load: function(){
-                this.callbacks['load'].forEach(function(handler){
+                this.callbacks.load.forEach(function(handler){
                     handler.call(this);
                 });
             },
+
             innerHeight: 926
         },
 
@@ -41,6 +43,7 @@ describe('Methods', function(){
 
     // document mock
     global.document = document;
+
     // window mock
     global.window = window;
 
