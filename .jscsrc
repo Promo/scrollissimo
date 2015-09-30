@@ -1,0 +1,62 @@
+{
+  "esnext": true,
+  "disallowSpacesInNamedFunctionExpression": {
+    "beforeOpeningRoundBrace": true,
+    "beforeOpeningCurlyBrace": true
+  },
+  "disallowSpacesInFunctionExpression": {
+    "beforeOpeningRoundBrace": true,
+    "beforeOpeningCurlyBrace": true
+  },
+  "disallowSpacesInAnonymousFunctionExpression": {
+    "beforeOpeningRoundBrace": true,
+    "beforeOpeningCurlyBrace": true
+  },
+  "disallowSpacesInFunctionDeclaration": {
+    "beforeOpeningRoundBrace": true,
+    "beforeOpeningCurlyBrace": true
+  },
+  "disallowEmptyBlocks": true,
+  "disallowSpacesInCallExpression": true,
+  "disallowQuotedKeysInObjects": "allButReserved",
+  "disallowSpaceAfterObjectKeys": true,
+  "disallowSpaceAfterPrefixUnaryOperators": true,
+  "disallowSpaceBeforePostfixUnaryOperators": true,
+  "disallowSpaceBeforeBinaryOperators": [
+    ","
+  ],
+  "disallowMixedSpacesAndTabs": "smart",
+  "disallowTrailingWhitespace": true,
+  "disallowYodaConditions": true,
+  "disallowKeywordsOnNewLine": ["else"],
+  "disallowMultipleLineBreaks": true,
+  "disallowSpaceBeforeComma": true,
+  "disallowSpaceBeforeSemicolon": true,
+  "requireSpaceBeforeBlockStatements": false,
+  "requireParenthesesAroundIIFE": true,
+  "requireSpacesInConditionalExpression": true,
+  "requireBlocksOnNewline": 1,
+  "requireCommaBeforeLineBreak": true,
+  "requireSpaceBeforeBinaryOperators": true,
+  "requireSpaceAfterBinaryOperators": true,
+  "requireCamelCaseOrUpperCaseIdentifiers": true,
+  "requireLineFeedAtFileEnd": true,
+  "requireCapitalizedConstructors": true,
+  "requireDotNotation": true,
+  "requireSpacesInForStatement": true,
+  "requireSpaceBetweenArguments": true,
+  "requireCurlyBraces": true,
+  "requireSpaceAfterKeywords": [
+    "return",
+    "typeof",
+    "instanceof"
+  ],
+  "requirePaddingNewLinesBeforeLineComments": true,
+  "requirePaddingNewLinesAfterBlocks": true,
+  "requireSemicolons": true,
+  "safeContextKeyword": "self",
+  "validateLineBreaks": "LF",
+  "validateQuoteMarks": "'",
+  "validateIndentation": 4,
+  "excludeFiles": [".githooks/*", "node_modules", "dist/*", "gulpfile.js"]
+}

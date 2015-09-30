@@ -23,11 +23,12 @@
     "test": "mocha"
   },
   "devDependencies": {
+    "git-hooks": "^1.0.0",
     "gulp": "^3.8.11",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.1.0",
+    "mocha": "^2.2.5",
     "qunitjs": "^1.18.0",
-    "should": "^6.0.3",
-    "mocha": "^2.2.5"
+    "should": "^6.0.3"
   }
 }
