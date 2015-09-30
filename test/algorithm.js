@@ -18,6 +18,9 @@ describe('Algorithm', function(){
             },
             pause: function(){
                 return this;
+            },
+            timeScale: function(){
+                return 1;
             }
         },
         testResult = [],
