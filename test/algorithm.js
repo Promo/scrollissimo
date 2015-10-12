@@ -28,27 +28,32 @@ describe('Algorithm', function(){
         },
         testResult = [],
 
-        window = window || {
+        triggerEvent = function(eventName){
+            this.callbacks[eventName].forEach(function(handler){
+                handler.call(this);
+            });
+        },
+
+        addEventListener = function(eventName, handler){
+            if(typeof handler === 'function' && this.callbacks[eventName]){
+                this.callbacks[eventName].push(handler);
+            }
+        },
+
+        window = {
             callbacks: {
                 load: []
             },
-            addEventListener: function(eventName, handler){
-                if(typeof handler === 'function' && this.callbacks[eventName]){
-                    this.callbacks[eventName].push(handler);
-                }
-            },
-
-            load: function(){
-                this.callbacks.load.forEach(function(handler){
-                    handler.call(this);
-                });
-            },
 
             innerHeight: 926,
+
             pageYOffset: 0
         },
 
-        document = document || {
+        document = {
+            callbacks: {
+                load: []
+            },
             body: {
                 scrollHeight: docHeight,
                 offsetHeight: docHeight,
@@ -65,10 +70,14 @@ describe('Algorithm', function(){
         testScrollTopData = [
             {
                 data: [ 4,44,192,456,748,1074 ],
-                result: [ 8,82,162,242,322,358,438,518,598,678,758,838,918,998,1078,1158,1238,1318,1398,1478,1558,1638 ],
                 maxSpeed: 80
             }
         ];
+
+    document.addEventListener = addEventListener.bind(document);
+    window.addEventListener = addEventListener.bind(window);
+    document.DOMContentLoaded = triggerEvent.bind(document, 'DOMContentLoaded');
+    window.load = triggerEvent.bind(window, 'load');
 
     // document mock
     global.document = document;
