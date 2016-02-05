@@ -2,7 +2,7 @@
   "name": "Scrollissimo",
   "version": "0.5.0",
   "description": "Javascript plugin for smooth scroll-controlled animations",
-  "main": "scrollissimo.js",
+  "main": "./lib/scrollissimo.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:Promo/scrollissimo.git"
