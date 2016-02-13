@@ -47,7 +47,7 @@ describe('Methods', function(){
     // window mock
     global.window = window;
 
-    Scrollissimo = require('../lib/scrollissimo');
+    Scrollissimo = require('../scrollissimo.es5');
 
     window.addEventListener('load', function(){
         it('_getIntersection tests', function(done){

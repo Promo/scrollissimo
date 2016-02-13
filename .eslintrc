@@ -98,7 +98,7 @@
 	"no-use-before-define": [2, "nofunc"],
 
 	"handle-callback-err": 1,
-	"no-mixed-requires": 2,
+	"no-mixed-requires": 0,
 	"no-new-require": 2,
 	"no-path-concat": 2,
 	"no-restricted-modules": [2, "domain", "freelist", "smalloc", "sys"],

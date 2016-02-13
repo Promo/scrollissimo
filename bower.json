@@ -6,7 +6,7 @@
     "Vladimir Kudinov <qdinov@yandex.ru>"
   ],
   "description": "Javascript plugin for smooth scroll-controlled animations",
-  "main": "/lib/scrollissimo.js",
+  "main": "scrollissimo.js",
   "moduleType": [
     "globals"
   ],
@@ -23,6 +23,7 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+	"examples"
   ]
 }
