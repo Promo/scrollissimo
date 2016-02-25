@@ -21,7 +21,7 @@
   "homepage": "https://github.com/Promo/scrollissimo",
   "scripts": {
     "mocha": "mocha",
-    "lint": eslint lib/scrollissimo.js",
+    "lint": "eslint lib/scrollissimo.js",
     "test": "npm run lint && npm run mocha"
   },
   "devDependencies": {
