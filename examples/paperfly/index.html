@@ -45,8 +45,8 @@
             sharpTimeline.to(sharpFly, 700, { top: '25%', left: '50%' });
             sharpTimeline.to(sharpFly, 1500, { top: '70%', left: '90%' });
             sharpTimeline.to(sharpFly, 149, { top: '65%', left: '100%' });
-            Scrollissimo.add(sharpTimeline, 0);
-            Scrollissimo.add(TweenMax.to(sharpDemo, 5349, { backgroundPosition: '-703px 0' }), 0);
+            scrollissimo.add(sharpTimeline, 0);
+            scrollissimo.add(TweenMax.to(sharpDemo, 5349, { backgroundPosition: '-703px 0' }), 0);
 
             smoothTimeline.to(smoothFly, 700, { top: '30%', left: '10%' });
             smoothTimeline.to(smoothFly, 700, { top: '60%', left: '20%' });
@@ -58,11 +58,11 @@
             smoothTimeline.to(smoothFly, 1500, { top: '70%', left: '90%' });
             smoothTimeline.to(smoothFly, 149, { top: '65%', left: '100%' });
 
-            Scrollissimo.add(smoothTimeline, 0, 60);
-            Scrollissimo.add(TweenMax.to(smoothDemo, 5349, { backgroundPosition: '-703px 0' }), 0, 60);
+            scrollissimo.add(smoothTimeline, 0, 60);
+            scrollissimo.add(TweenMax.to(smoothDemo, 5349, { backgroundPosition: '-703px 0' }), 0, 60);
 
             window.addEventListener('scroll', function(){
-                Scrollissimo.knock();
+                scrollissimo.knock();
             });
         });
 
