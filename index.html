@@ -87,12 +87,12 @@ Scrollissimo.add(myTween, 0, 25);<!--
         firstTimeline.to(step3, 1000, { rotationX: 0, visibility: 'visible' });
         firstTimeline.to(screen1, 1000, { top: '-30%' }, '+=1500');
 
-        Scrollissimo.add(firstTimeline, 0, 60);
+        scrollissimo.add(firstTimeline, 0, 60);
 
-        Scrollissimo.add(new TweenMax(indicator, 9500, { scale: 1, ease: Linear.easeNone, paused: true }), 0);
+        scrollissimo.add(new TweenMax(indicator, 9500, { scale: 1, ease: Linear.easeNone, paused: true }), 0);
 
         window.addEventListener('scroll', function(){
-            Scrollissimo.knock();
+            scrollissimo.knock();
         });
     });
 </script>
