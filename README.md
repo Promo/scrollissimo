@@ -45,13 +45,13 @@ To support touch devices you also need to include touch adapter:
     <script src="scrollissimo/dist/scrollissimo.touch.min.js"></script>
 ```
 
-Next we will trigger Scrollissimo on each scroll event:
+Next we will trigger scrollissimo on each scroll event:
 
 ```html
 <script>
     $(document).ready(function(){
         $(window).scroll(function(){
-            Scrollissimo.knock();
+            scrollissimo.knock();
         });
     });
 </script>
@@ -93,13 +93,13 @@ var divyTween = TweenLite.to(document.getElementById('divy'), 1000, { width: 300
 
 Then we need to add this tween to Scrollissimo.
 
-**```Scrollissimo.add(<Tween|Timeline>, <StartPixels>, <MaxSpeed>);```**
+**```scrollissimo.add(<Tween|Timeline>, <StartPixels>, <MaxSpeed>);```**
 
 The second argument is start scroll value in pixels.
 The third argument is a maximal value of changing scrollTop.
 
 ```js
-Scrollissimo.add(divyTween, 0, 25);
+scrollissimo.add(divyTween, 0, 25);
 ```
 
 That is all you need to do to make a simple animation.
