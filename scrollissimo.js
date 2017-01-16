@@ -10,27 +10,19 @@
 /* global window, document */
 
 // array of not smoothed animations
-let queues = [],
+const queues = [];
 
-	// array of smoothed animations
-	smoothQueues = [],
+// array of smoothed animations
+const smoothQueues = [];
 
-	// disable triggering. It's needed to prevent start scroll position animating
-	disableKnock = true,
+// disable triggering. It's needed to prevent start scroll position animating
+let disableKnock = true;
 
-	// previous trigger scroll value
-	previousScrollTop = 0,
-	Queue;
+// previous trigger scroll value
+let previousScrollTop = 0;
 
-export var enableSmoothing = true;
-export const _isTouchMode = ('ontouchstart' in window),
-	_test = {
-		_setRenderFunc: function(newRenderFunc){
-			Queue.prototype._render = newRenderFunc;
-		},
-
-		_getIntersection: getIntersection
-	};
+export let enableSmoothing = true;
+export const _isTouchMode = ('ontouchstart' in window);
 
 /**
  * Get intersection of two custom number ranges
@@ -40,25 +32,25 @@ export const _isTouchMode = ('ontouchstart' in window),
  * @param to2 {number}
  * @returns {{from: number, to: number}|undefined}
  */
-function getIntersection(from1, to1, from2, to2){
-	const f2 = Math.min(from2, to2),
-		t2 = Math.max(from2, to2),
-		f1 = from1,
-		t1 = to1;
+function getIntersection(from1, to1, from2, to2) {
+	const f2 = Math.min(from2, to2);
+	const t2 = Math.max(from2, to2);
+	const f1 = from1;
+	const t1 = to1;
 
-	var n1,
-		n2;
+	let n1;
+	let n2;
 
-	if(f2 <= f1 && t2 >= f1){
+	if (f2 <= f1 && t2 >= f1) {
 		n1 = f1;
 		n2 = Math.min(t2, t1);
-	}else if(t2 >= t1 && f2 <= t1){
+	} else if (t2 >= t1 && f2 <= t1) {
 		n1 = Math.max(f2, f1);
 		n2 = Math.min(t2, t1);
-	}else if(f2 >= f1 && t2 <= t1){
+	} else if (f2 >= f1 && t2 <= t1) {
 		n1 = f2;
 		n2 = t2;
-	}else{
+	} else {
 		return;
 	}
 
@@ -73,8 +65,8 @@ function getIntersection(from1, to1, from2, to2){
  * @private
  * @constructor
  */
-Queue = function(timeline, start, maxSpeed){
-	if(timeline){
+const Queue = function (timeline, start, maxSpeed) {
+	if (timeline) {
 		// convert start and duration to percents
 		this.params = {
 			start: start || 0,
@@ -85,7 +77,7 @@ Queue = function(timeline, start, maxSpeed){
 		this.timeline = timeline.pause();
 
 		// if maximal speed specified
-		if(!isNaN(maxSpeed)){
+		if (!isNaN(maxSpeed)) {
 			// convert it to seconds
 			this._maxSpeed = maxSpeed;
 
@@ -101,8 +93,8 @@ Queue = function(timeline, start, maxSpeed){
  * @param scrollTop {number}
  * @returns {{from: number, to: number}|undefined}
  */
-Queue.prototype.getIntersection = function(previousScrollTop, scrollTop){
-	return getIntersection(this.params.start, this.params.start + this.timeline.duration() * this.timeline.timeScale(), previousScrollTop, scrollTop);
+Queue.prototype.getIntersection = function (previousScrollTop, scrollTop) {
+	return getIntersection(this.params.start, this.params.start + (this.timeline.duration() * this.timeline.timeScale()), previousScrollTop, scrollTop);
 };
 
 /**
@@ -110,15 +102,15 @@ Queue.prototype.getIntersection = function(previousScrollTop, scrollTop){
  * @param scrollTop {number} scrollTop
  * @returns {Queue}
  */
-Queue.prototype.render = function(scrollTop){
+Queue.prototype.render = function (scrollTop) {
 	// convert progress of page scrolling to progress of this tween
 	let tweenProgress = Math.round((scrollTop - this.params.start) / this.timeline.duration() * this.timeline.timeScale() * 1000) / 1000;
 
-	if(tweenProgress < 0){
+	if (tweenProgress < 0) {
 		tweenProgress = 0;
 	}
 
-	if(tweenProgress > 1){
+	if (tweenProgress > 1) {
 		tweenProgress = 1;
 	}
 
@@ -134,7 +126,7 @@ Queue.prototype.render = function(scrollTop){
  * @param maxSpeed {number} Max percents of page's height animation can play on one requestAnimationFrame tick
  * @constructor
  */
-Queue.Smoother = function(queue, maxSpeed){
+Queue.Smoother = function (queue, maxSpeed) {
 	// current state of this Smoother 'busy' or 'idle'
 	this.status = 'idle';
 
@@ -153,12 +145,12 @@ Queue.Smoother = function(queue, maxSpeed){
  * @param previousScrollTop {number} Previous scrollTop value
  * @param scrollTop {number} Current scrollTop value
  */
-Queue.Smoother.prototype.smooth = function(previousScrollTop, scrollTop){
+Queue.Smoother.prototype.smooth = function (previousScrollTop, scrollTop) {
 	// does current scroll intersects with this queue?
 	const intersection = this.queue.getIntersection(previousScrollTop, scrollTop);
 
 	// if it does...
-	if(intersection){
+	if (intersection) {
 		// replace finish value by current scroll value
 		this.animateTo = intersection.to;
 
@@ -166,7 +158,7 @@ Queue.Smoother.prototype.smooth = function(previousScrollTop, scrollTop){
 		this.animateFrom = this.animateFrom || intersection.from;
 
 		// if Smoother is idle we need to run it
-		if(this.status === 'idle'){
+		if (this.status === 'idle') {
 			// set playing status
 			this.status = 'busy';
 
@@ -181,18 +173,18 @@ Queue.Smoother.prototype.smooth = function(previousScrollTop, scrollTop){
 /**
  * Smoother's tick function
  */
-Queue.Smoother.prototype.step = function(){
+Queue.Smoother.prototype.step = function () {
 	// calculate diff between the start and the end of tween playing
 	const delta = this.animateTo - this.animateFrom;
 
 	// if absolute value of this difference is more than maximal speed
-	if(Math.abs(delta) > this.maxSpeed){
+	if (Math.abs(delta) > this.maxSpeed) {
 		// jump by maximal speed value instead of delta and render it
 		this.queue.render(this.animateFrom += this.maxSpeed * (delta > 0 ? 1 : -1));
 
 		// run next tick
 		window.requestAnimationFrame(this.step.bind(this));
-	}else{
+	} else {
 		// render finish frame
 		this.queue.render(this.animateTo);
 
@@ -211,14 +203,14 @@ Queue.Smoother.prototype.step = function(){
  * @param maxSpeed {number|undefined} Max speed
  * @returns {Scrollissimo}
  */
-export function add(timeline, start, maxSpeed){
+export function add(timeline, start, maxSpeed) {
 	// if maximal speed is specified
-	if(!isNaN(maxSpeed)){
-		// add this queue to smooth queues
-		smoothQueues.push(new Queue(timeline, start, maxSpeed));
-	}else{
+	if (isNaN(maxSpeed)) {
 		// else place it to usual queues
 		queues.push(new Queue(timeline, start, maxSpeed));
+	} else {
+		// add this queue to smooth queues
+		smoothQueues.push(new Queue(timeline, start, maxSpeed));
 	}
 
 	return this;
@@ -230,7 +222,7 @@ export function add(timeline, start, maxSpeed){
  * @param enableSmoothing {boolean}
  * @private
  */
-function _render(scrollTop, enableSmoothing){
+function _render(scrollTop, enableSmoothing) {
 	// for each not smoothed queue
 	queues.forEach(queue => {
 		// just render current scroll progress
@@ -240,10 +232,10 @@ function _render(scrollTop, enableSmoothing){
 	// for each smoothed queue
 	smoothQueues.forEach(queue => {
 		// if smoothing is not disabled
-		if(enableSmoothing){
+		if (enableSmoothing) {
 			// run smoother
 			queue._smoother.smooth(previousScrollTop, scrollTop);
-		}else{
+		} else {
 			// else just render current scroll progress
 			queue.render(scrollTop);
 		}
@@ -255,7 +247,7 @@ function _render(scrollTop, enableSmoothing){
  * @param customScrollTop {number|undefined} Custom scroll value. Default: current scroll value.
  * @private
  */
-function _catch(customScrollTop){
+function _catch(customScrollTop) {
 	// calculate current scroll
 	const scrollTop = (isNaN(customScrollTop) ? window.pageYOffset : customScrollTop);
 
@@ -269,10 +261,10 @@ function _catch(customScrollTop){
 	 * Trigger Scrollissimo
 	 * @param customScrollTop {Number|undefined} Custom scrollTop value
 	 */
-export function knock(customScrollTop){
-	if(!disableKnock){
+export function knock(customScrollTop) {
+	if (!disableKnock) {
 		_catch(customScrollTop);
-		if(isNaN(customScrollTop)){
+		if (isNaN(customScrollTop)) {
 			setTimeout(_catch, 10);
 		}
 	}
@@ -280,18 +272,18 @@ export function knock(customScrollTop){
 
 /* Scrollissimo will be initialized then window will be loaded.
    Also Scrollissimo will try to catch first scroll movement (first 10 scroll values) to define if you need a smoothing */
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
 	// array first 10 scroll values will be written in
-	let wheelStack = [],
+	let wheelStack = [];
 
-		// remember timestamp
-		spectateStartTime = Number(new Date()),
-		stepwiseDetector;
+	// remember timestamp
+	let spectateStartTime = Number(new Date());
+	let stepwiseDetector;
 
 	// Render start scroll position instead of animating it
 	setTimeout(() => {
 		// get start scroll value
-		var startScrollTop = window.pageYOffset;
+		const startScrollTop = window.pageYOffset;
 
 		// remember start scroll position as a previous
 		previousScrollTop = startScrollTop;
@@ -304,14 +296,16 @@ document.addEventListener('DOMContentLoaded', function(){
 	}, 100);
 
 	// if it's not a touch device
-	if(!_isTouchMode){
+	if (_isTouchMode) {
+		enableSmoothing = false;
+	} else {
 		// function which will collect 10 values of first scroll movement to define if you need a smoothing
-		stepwiseDetector = function(e){
-			let bigStepDetected = false,
-				i;
+		stepwiseDetector = function (e) {
+			let bigStepDetected = false;
+			let i;
 
 			// if all is done
-			if(wheelStack.length === 5){
+			if (wheelStack.length === 5) {
 				// remove this scroll handler
 				window.removeEventListener('wheel', stepwiseDetector);
 			}
@@ -319,10 +313,10 @@ document.addEventListener('DOMContentLoaded', function(){
 			// remember this value
 			wheelStack.push(e.deltaY);
 
-			if((Number(new Date()) - spectateStartTime <= 400)){
-				if(wheelStack.length === 5){
-					for(i = 0; i < 5; i++){
-						if((Math.abs(wheelStack[i])) > 100){
+			if ((Number(new Date()) - spectateStartTime <= 400)) {
+				if (wheelStack.length === 5) {
+					for (i = 0; i < 5; i++) {
+						if ((Math.abs(wheelStack[i])) > 100) {
 							bigStepDetected = true;
 							break;
 						}
@@ -331,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function(){
 					// define disable smoothing or not
 					enableSmoothing = bigStepDetected;
 				}
-			}else{
+			} else {
 				// reset scroll values and timer
 				spectateStartTime = Number(new Date());
 				wheelStack = [];
@@ -339,7 +333,13 @@ document.addEventListener('DOMContentLoaded', function(){
 		};
 
 		window.addEventListener('wheel', stepwiseDetector);
-	}else{
-		enableSmoothing = false;
 	}
 });
+
+export const _test = {
+	_setRenderFunc: function (newRenderFunc) {
+		Queue.prototype._render = newRenderFunc;
+	},
+
+	_getIntersection: getIntersection
+};
