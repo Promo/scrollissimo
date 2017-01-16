@@ -39,12 +39,6 @@ The first step you need is to include Greensock:
     <script src="scrollissimo/dist/scrollissimo.min.js"></script>
 ```
 
-To support touch devices you also need to include touch adapter:
-
-```html
-    <script src="scrollissimo/dist/scrollissimo.touch.min.js"></script>
-```
-
 Next we will trigger scrollissimo on each scroll event:
 
 ```html
