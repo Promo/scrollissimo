@@ -84,7 +84,7 @@ describe('Algorithm', function(){
 	// window mock
 	global.window = window;
 
-	Scrollissimo = require('../scrollissimo.es5');
+	Scrollissimo = require('../dist/scrollissimo.min');
 
 	Scrollissimo._test._setRenderFunc(function(scrollTop){
 		testResult.push(scrollTop);

@@ -12,7 +12,7 @@ const gulp = require('gulp'),
  */\n`;
 
 gulp.task('es5', function(){
-	gulp.src('./scrollissimo.js')
+	gulp.src('./src/scrollissimo.js')
 	.pipe(babel({
 		presets: ['es2015'],
 		compact: true,
@@ -21,7 +21,7 @@ gulp.task('es5', function(){
 	}))
 	.pipe(insert.prepend(SCROLLISSIMO_BADGE))
 	.pipe(rename({
-		extname: '.es5.js'
+		extname: '.min.js'
 	}))
-	.pipe(gulp.dest('./'));
+	.pipe(gulp.dest('./dist'));
 });
