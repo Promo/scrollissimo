@@ -8,7 +8,7 @@ const gulp = require('gulp'),
  * Javascript plugin for smooth scroll-controlled animations
  * @version ${packageInfo.version}
  * @author frux <qdinov@yandex.ru>
- * @url https:// github.com/Promo/scrollissimo
+ * @url https://github.com/Promo/scrollissimo
  */\n`;
 
 gulp.task('es5', function(){
