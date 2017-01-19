@@ -80,7 +80,7 @@ The first let's create Grensock's tween.
 more in [Greensock`s documentation](http://greensock.com/docs/#/HTML5/GSAP/TweenMax/to/)
 
 ```js
-var divyTween = TweenLite.to(document.getElementById('divy'), 1000, { width: 300 });
+var divyTween = TweenLite.to(document.getElementById('Divy'), 1000, { width: 300 });
 ```
 
 **NOTE:** As you see it\`s usual Greensock\`s Tween except of duration of animation ***must be specified in pixels not in seconds.
