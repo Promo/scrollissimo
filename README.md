@@ -12,10 +12,10 @@ Comparing Scrollissimo and another usual plugins [here](http://promo.github.io/s
 
 ### Download
 
-Scrollissimo is available for downloading from repository. Also bower users can install Scrollissimo by command:
+Scrollissimo is available for downloading from repository. Also npm users can install Scrollissimo by command:
 
 ```bash
-bower install scrollissimo
+npm install scrollissimo
 ```
 
 ### Connect

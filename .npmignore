@@ -1,0 +1,8 @@
+.idea
+.DS_Store
+node_modules
+test
+.travis.yml
+gulpfile.js
+.eslintrs.js
+.eslintignore
